@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">HNReceipt</string>
+    <string name="create_do">Buat Delivery Order</string>
+    <string name="pilih_lahan_panen">Pilih Lahan Panen</string>
+    <string name="tambah_lahan_panen">Tambah Lahan Panen</string>
+    <string name="berat_total">Berat Total</string>
+    <string name="berat_total_default">0 KG</string>
+    <string name="no_lahan_panen_message">Belum ada lahan panen. Pilih tombol\ntambahkan lahan panen</string>
+    <string name="berat_bersih">Berat Bersih</string>
+    <string name="berat_brondol">Berat Brondol</string>
+    <string name="kehadiran">Kehadiran</string>
+    <string name="simpan">Simpan</string>
+    <string name="nama_karyawan">Nama Karyawan</string>
+    <string name="tanggal">Tanggal</string>
+    <string name="tutup">Tutup</string>
+    <string name="jumlah_hadir_default">0 Hadir</string>
+    <string name="lahan">Lahan</string>
+</resources>

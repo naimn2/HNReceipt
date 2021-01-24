@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.CreateDOActivity"
+    android:paddingBottom="@dimen/normal_margin">
+
+    <RelativeLayout
+        android:id="@+id/rl_activityCreateDO_layoutListLahanPanen"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_activityCreateDO_listLahanPanen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_list_panen_lahan"/>
+
+        <TextView
+            android:id="@+id/tv_activityCreateDO_noLahanPanen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/no_lahan_panen_message"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:textAlignment="center"
+            android:textColor="@color/lightGray"
+            android:textSize="18sp"
+            android:visibility="invisible"/>
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_thin"
+        android:layout_marginBottom="@dimen/normal_margin"
+        android:background="@color/veryLightGray"
+        app:layout_constraintBottom_toTopOf="@+id/tv_activityCreateDO_tanggal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_activityCreateDO_tanggal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/normal_margin"
+        android:text="@string/tanggal"
+        app:layout_constraintBottom_toTopOf="@+id/btn_activityCreateDO_tambahLahanPanen"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_activityCreateDO_labelBeratTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/normal_margin"
+        android:text="@string/berat_total"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/btn_activityCreateDO_tambahLahanPanen"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_activityCreateDO_beratTotal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/very_high_margin"
+        android:layout_marginBottom="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/normal_margin"
+        android:text="@string/berat_total_default"
+        app:layout_constraintBottom_toTopOf="@+id/btn_activityCreateDO_tambahLahanPanen"
+        app:layout_constraintEnd_toStartOf="@+id/tv_activityCreateDO_tanggal"
+        app:layout_constraintStart_toEndOf="@+id/tv_activityCreateDO_labelBeratTotal" />
+
+    <Button
+        android:id="@+id/btn_activityCreateDO_tambahLahanPanen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/normal_margin"
+        android:backgroundTint="@color/teal_700"
+        android:text="@string/tambah_lahan_panen"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="7dp"
+        android:visibility="invisible"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

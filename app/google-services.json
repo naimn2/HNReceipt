@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "882261469274",
+    "firebase_url": "https://hndev-5a5b7-default-rtdb.firebaseio.com",
+    "project_id": "hndev-5a5b7",
+    "storage_bucket": "hndev-5a5b7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:882261469274:android:c4ef5fdfb83c355a1ad063",
+        "android_client_info": {
+          "package_name": "com.kakzain.hnreceipt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "882261469274-5iogpo1fbtuev8248j0dfkkr3fv91dmc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBw3ZEc9LghYK8sOI7X4y5guvgpD-SbhNA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "882261469274-5iogpo1fbtuev8248j0dfkkr3fv91dmc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

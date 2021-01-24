@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="normal_margin">7dp</dimen>
+    <dimen name="high_margin">12dp</dimen>
+    <dimen name="very_high_margin">18dp</dimen>
+    <dimen name="divider_thin">1dp</dimen>
+</resources>
