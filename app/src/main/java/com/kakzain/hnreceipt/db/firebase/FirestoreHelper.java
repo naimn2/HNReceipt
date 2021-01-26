@@ -16,8 +16,10 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.kakzain.hnreceipt.db.IDatabaseHelper;
+import com.kakzain.hnreceipt.helper.IDGenerator;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -159,7 +161,7 @@ public class FirestoreHelper<E> implements IDatabaseHelper<E> {
 
     @Override
     public String pushWriteValue(E value) {
-        String id = generateRandomId(20);
+        String id = IDGenerator.generateUniqueKey(new Date().getTime());
         collectionReference.document(id).set(value);
         return id;
     }
@@ -246,28 +248,5 @@ public class FirestoreHelper<E> implements IDatabaseHelper<E> {
                 valueEventListenerCallback.onValueEventListenerCancelled(error.getMessage());
             }
         }
-    }
-
-    private String generateRandomId(int length) {
-        char[] randomId = new char[length];
-        Random random = new Random();
-        String result;
-        for (int i = 0; i < length; i++) {
-            int way = random.nextInt(3);
-            int randNum;
-            switch (way) {
-                case 0:
-                    randNum = random.nextInt(10) + 48;
-                    break;
-                case 1:
-                    randNum = random.nextInt(26) + 65;
-                    break;
-                default:
-                    randNum = random.nextInt(26) + 97;
-            }
-            randomId[i] = (char) randNum;
-        }
-        result = new String(randomId);
-        return result;
     }
 }

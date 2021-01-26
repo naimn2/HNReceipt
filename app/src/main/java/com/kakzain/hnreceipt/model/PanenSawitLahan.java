@@ -4,11 +4,11 @@ import java.util.List;
 
 public class PanenSawitLahan {
     private int idLahan;
-    private List<String> kehadiran;
+    private List<Kehadiran> kehadiran;
     private float beratBersih;
     private float beratBrondol;
 
-    public PanenSawitLahan(int idLahan, List<String> kehadiran, float beratBersih, float beratBrondol) {
+    public PanenSawitLahan(int idLahan, List<Kehadiran> kehadiran, float beratBersih, float beratBrondol) {
         this.idLahan = idLahan;
         this.kehadiran = kehadiran;
         this.beratBersih = beratBersih;
@@ -22,7 +22,7 @@ public class PanenSawitLahan {
         return idLahan;
     }
 
-    public List<String> getKehadiran() {
+    public List<Kehadiran> getKehadiran() {
         return kehadiran;
     }
 

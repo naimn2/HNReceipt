@@ -12,15 +12,16 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/normal_margin"
         android:text="@string/nama_karyawan"
-        app:layout_constraintBottom_toBottomOf="@+id/cb_itemListKaryawan_check"
-        app:layout_constraintEnd_toStartOf="@+id/cb_itemListKaryawan_check"
+        app:layout_constraintBottom_toBottomOf="@+id/spin_itemListKaryawan_check"
+        app:layout_constraintEnd_toStartOf="@+id/spin_itemListKaryawan_check"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/cb_itemListKaryawan_check" />
+        app:layout_constraintTop_toTopOf="@+id/spin_itemListKaryawan_check" />
 
-    <CheckBox
-        android:id="@+id/cb_itemListKaryawan_check"
-        android:layout_width="0dp"
+    <Spinner
+        android:id="@+id/spin_itemListKaryawan_check"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:spinnerMode="dropdown"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,9 +30,9 @@
         android:id="@+id/view_itemListKaryawan_divider"
         android:layout_width="0dp"
         android:layout_height="@dimen/divider_thin"
-        android:background="@color/lightGray"
+        android:background="@color/veryLightGray"
         app:layout_constraintStart_toStartOf="@+id/tv_itemListKaryawan_nama"
-        app:layout_constraintEnd_toStartOf="@+id/cb_itemListKaryawan_check"
-        app:layout_constraintTop_toBottomOf="@+id/cb_itemListKaryawan_check" />
+        app:layout_constraintEnd_toStartOf="@+id/spin_itemListKaryawan_check"
+        app:layout_constraintTop_toBottomOf="@+id/spin_itemListKaryawan_check" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

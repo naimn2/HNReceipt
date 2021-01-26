@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kakzain.hnreceipt.MyConstants;
 import com.kakzain.hnreceipt.R;
 import com.kakzain.hnreceipt.model.PanenSawitLahan;
 
@@ -42,8 +43,8 @@ public class ListPanenLahanAdapter extends RecyclerView.Adapter<ListPanenLahanAd
         int jumlahHadir = listPanenSawitLahan.get(position).getKehadiran().size();
         int iLahan = listPanenSawitLahan.get(position).getIdLahan();
 
-        holder.tvLahan.setText("Lahan "+(iLahan+1));
-        holder.tvJumlahHadir.setText(String.valueOf(jumlahHadir)+" Hadir");
+        holder.tvLahan.setText(MyConstants.LAHAN[iLahan]);
+        holder.tvJumlahHadir.setText(String.format("%d Hadir", jumlahHadir));
         if (position%2 == 0){
             holder.divider.setVisibility(View.INVISIBLE);
         } else {

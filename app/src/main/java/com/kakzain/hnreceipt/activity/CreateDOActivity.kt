@@ -8,6 +8,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.kakzain.hnreceipt.MyConstants
 import com.kakzain.hnreceipt.R
 import com.kakzain.hnreceipt.adapter.ListKaryawamAdapter
 import com.kakzain.hnreceipt.adapter.ListPanenLahanAdapter
@@ -16,11 +17,13 @@ import com.kakzain.hnreceipt.db.firebase.FirestoreHelper
 import com.kakzain.hnreceipt.helper.DateFormatter
 import com.kakzain.hnreceipt.model.DeliveryOrder
 import com.kakzain.hnreceipt.model.Karyawan
+import com.kakzain.hnreceipt.model.Kehadiran
 import com.kakzain.hnreceipt.model.PanenSawitLahan
 import kotlinx.android.synthetic.main.activity_create_d_o.*
 import java.lang.Exception
 import java.lang.NumberFormatException
-import java.util.ArrayList
+import java.util.*
+import kotlin.collections.HashMap
 
 class CreateDOActivity : AppCompatActivity() {
     companion object { val ID_DO_EXTRA = "idDOExtra" }
@@ -33,7 +36,7 @@ class CreateDOActivity : AppCompatActivity() {
     private lateinit var panenLahanAdapter: ListPanenLahanAdapter
     private lateinit var listKaryawan: ArrayList<Karyawan>
     private lateinit var listIdKaryawan: ArrayList<String>
-    private lateinit var listKehadiran: HashMap<Int, String>
+    private lateinit var listKehadiran: HashMap<Int, Kehadiran>
     private lateinit var currentDO: DeliveryOrder
     private var idDO: String? = null
 
@@ -95,7 +98,8 @@ class CreateDOActivity : AppCompatActivity() {
 
         val btnSave = dialogView.findViewById<Button>(R.id.btn_dialogTambahLahanPanen_save)
         val spinLahan = dialogView.findViewById<Spinner>(R.id.spinner_dialogTambahLahanPanen_lahan)
-        val spinArrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, arrayOf("Pilih Lahan Sawit", "Lahan1", "Lahan2", "Lahan3"))
+        val lahanArray = concatArray(arrayOf("Pilih Lahan"), MyConstants.LAHAN)
+        val spinArrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, lahanArray)
         spinLahan.adapter = spinArrayAdapter
         val etBeratBersih = dialogView.findViewById<EditText>(R.id.et_dialogTambahLahanPanen_beratBersih)
         val etBeratBrondol = dialogView.findViewById<EditText>(R.id.et_dialogTambahLahanPanen_beratBrondol)
@@ -105,11 +109,14 @@ class CreateDOActivity : AppCompatActivity() {
         // SIAPKAN RECYCLER VIEW KEHADIRAN KARYAWAN
         val linearLayoutManager = LinearLayoutManager(this)
         adapterKehadiran = ListKaryawamAdapter(this)
-        adapterKehadiran.setOnHadirListenerCallback { b, position ->
-            if (b) {
-                listKehadiran.put(position, listIdKaryawan.get(position))
-            } else {
-                listKehadiran.remove(position)
+        adapterKehadiran.setOnHadirListenerCallback { i, position ->
+            val idKaryawan = listIdKaryawan.get(position)
+            when (i) {
+                0 -> listKehadiran.remove(position)
+                1 -> listKehadiran.put(position, Kehadiran(idKaryawan, MyConstants.POSISI_PENGANGKUT))
+                2 -> listKehadiran.put(position, Kehadiran(idKaryawan, MyConstants.POSISI_PEMANEN))
+                3 -> listKehadiran.put(position, Kehadiran(idKaryawan, MyConstants.POSISI_SOPIR))
+                4 -> listKehadiran.put(position, Kehadiran(idKaryawan, MyConstants.POSISI_BRONDOL))
             }
         }
         rvKehadiran.layoutManager = linearLayoutManager
@@ -146,6 +153,13 @@ class CreateDOActivity : AppCompatActivity() {
         }
 
         readKaryawanDb()
+    }
+
+    private fun concatArray(init: Array<String>, lahan: Array<String>): ArrayList<String> {
+        val lahanArray = ArrayList<String>()
+        lahanArray.addAll(init)
+        lahanArray.addAll(lahan)
+        return lahanArray
     }
 
     private fun saveToDb(lahanPanen: PanenSawitLahan){

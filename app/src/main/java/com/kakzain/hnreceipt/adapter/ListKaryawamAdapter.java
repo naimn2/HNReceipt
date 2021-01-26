@@ -4,17 +4,24 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.kakzain.hnreceipt.MyConstants;
 import com.kakzain.hnreceipt.R;
 import com.kakzain.hnreceipt.model.Karyawan;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 public class ListKaryawamAdapter extends RecyclerView.Adapter<ListKaryawamAdapter.ViewHolder> {
     private final Context context;
@@ -47,12 +54,23 @@ public class ListKaryawamAdapter extends RecyclerView.Adapter<ListKaryawamAdapte
     public void onBindViewHolder(@NonNull ListKaryawamAdapter.ViewHolder holder, int position) {
         String nama = listKaryawan.get(position).getNama();
         holder.tvNama.setText(nama);
-        holder.cbHadir.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        ArrayAdapter<String> spinHadirAdapter = new ArrayAdapter<>(
+                context,
+                android.R.layout.simple_spinner_dropdown_item,
+                concatArray(new String[]{"T"}, MyConstants.POSISI)
+        );
+        holder.spinHadir.setAdapter(spinHadirAdapter);
+        holder.spinHadir.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (onHadirListenerCallback!=null){
-                    onHadirListenerCallback.onHadirChanged(b, position);
+                    onHadirListenerCallback.onHadirChanged(i, position);
                 }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
         if (position%2!=0 && position != listKaryawan.size()-1){
@@ -67,19 +85,25 @@ public class ListKaryawamAdapter extends RecyclerView.Adapter<ListKaryawamAdapte
         return listKaryawan.size();
     }
 
+    private ArrayList<String> concatArray(String[] init, String[] array){
+        ArrayList<String> lahanArray = new ArrayList<>(Arrays.asList(init));
+        lahanArray.addAll(Arrays.asList(array));
+        return lahanArray;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvNama;
-        private final CheckBox cbHadir;
+        private final Spinner spinHadir;
         private final View divider;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvNama = itemView.findViewById(R.id.tv_itemListKaryawan_nama);
-            cbHadir = itemView.findViewById(R.id.cb_itemListKaryawan_check);
+            spinHadir = itemView.findViewById(R.id.spin_itemListKaryawan_check);
             divider = itemView.findViewById(R.id.view_itemListKaryawan_divider);
         }
     }
 
     public interface OnClickListenerCallback {
-        void onHadirChanged(boolean b, int position);
+        void onHadirChanged(int i, int position);
     }
 }

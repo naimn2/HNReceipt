@@ -31,7 +31,7 @@
         android:id="@+id/view_itemListPanenLahan_divider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_thin"
-        android:layout_marginTop="@dimen/normal_margin"
+        android:layout_margin="@dimen/normal_margin"
         android:background="@color/veryLightGray"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_itemListPanenLahan_lahan" />
