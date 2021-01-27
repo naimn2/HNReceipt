@@ -1,11 +1,16 @@
 package com.kakzain.hnreceipt.db.lokal;
 
-import java.util.List;
+import android.content.Context;
+
+import java.util.Map;
 
 public interface ILokalHelper<E> {
-    ILokalHelper<E> setReference(String reference);
-    ILokalHelper<E> save(E object);
-    ILokalHelper<E> save(List<E> objects);
-    ILokalHelper<E> get();
-    ILokalHelper<E> getList();
+    void open();
+    void close();
+    long insert(String id, E value);
+    Map<String, E> getItems(Class<E> eClass);
+    int update(String id, E value);
+    int delete(String id);
+    boolean isExist(String...id);
+    boolean isEmpty();
 }

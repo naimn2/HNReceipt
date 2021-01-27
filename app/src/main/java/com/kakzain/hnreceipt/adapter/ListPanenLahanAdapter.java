@@ -43,7 +43,7 @@ public class ListPanenLahanAdapter extends RecyclerView.Adapter<ListPanenLahanAd
         int jumlahHadir = listPanenSawitLahan.get(position).getKehadiran().size();
         int iLahan = listPanenSawitLahan.get(position).getIdLahan();
 
-        holder.tvLahan.setText(MyConstants.LAHAN[iLahan]);
+        holder.tvLahan.setText(MyConstants.getLahanArrayList(context, false).get(iLahan));
         holder.tvJumlahHadir.setText(String.format("%d Hadir", jumlahHadir));
         if (position%2 == 0){
             holder.divider.setVisibility(View.INVISIBLE);

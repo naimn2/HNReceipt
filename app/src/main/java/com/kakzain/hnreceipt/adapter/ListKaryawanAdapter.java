@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -20,15 +18,13 @@ import com.kakzain.hnreceipt.model.Karyawan;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 
-public class ListKaryawamAdapter extends RecyclerView.Adapter<ListKaryawamAdapter.ViewHolder> {
+public class ListKaryawanAdapter extends RecyclerView.Adapter<ListKaryawanAdapter.ViewHolder> {
     private final Context context;
     private ArrayList<Karyawan> listKaryawan;
     private OnClickListenerCallback onHadirListenerCallback;
 
-    public ListKaryawamAdapter(Context context) {
+    public ListKaryawanAdapter(Context context) {
         this.listKaryawan = new ArrayList<>();
         this.context = context;
     }
@@ -45,13 +41,13 @@ public class ListKaryawamAdapter extends RecyclerView.Adapter<ListKaryawamAdapte
 
     @NonNull
     @Override
-    public ListKaryawamAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ListKaryawanAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_list_karyawan, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListKaryawamAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ListKaryawanAdapter.ViewHolder holder, int position) {
         String nama = listKaryawan.get(position).getNama();
         holder.tvNama.setText(nama);
         ArrayAdapter<String> spinHadirAdapter = new ArrayAdapter<>(

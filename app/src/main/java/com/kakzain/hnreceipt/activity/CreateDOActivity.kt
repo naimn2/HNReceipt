@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kakzain.hnreceipt.MyConstants
 import com.kakzain.hnreceipt.R
-import com.kakzain.hnreceipt.adapter.ListKaryawamAdapter
+import com.kakzain.hnreceipt.adapter.ListKaryawanAdapter
 import com.kakzain.hnreceipt.adapter.ListPanenLahanAdapter
 import com.kakzain.hnreceipt.db.IDatabaseHelper
 import com.kakzain.hnreceipt.db.firebase.FirestoreHelper
@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.activity_create_d_o.*
 import java.lang.Exception
 import java.lang.NumberFormatException
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 class CreateDOActivity : AppCompatActivity() {
@@ -32,11 +33,11 @@ class CreateDOActivity : AppCompatActivity() {
     private lateinit var dbKaryawanHelper: IDatabaseHelper<Karyawan>
     private lateinit var dbDOHelper: IDatabaseHelper<DeliveryOrder>
     private lateinit var dbPanenSawitLahan: IDatabaseHelper<PanenSawitLahan>
-    private lateinit var adapterKehadiran: ListKaryawamAdapter
+    private lateinit var adapterKehadiran: ListKaryawanAdapter
     private lateinit var panenLahanAdapter: ListPanenLahanAdapter
     private lateinit var listKaryawan: ArrayList<Karyawan>
     private lateinit var listIdKaryawan: ArrayList<String>
-    private lateinit var listKehadiran: HashMap<Int, Kehadiran>
+    private lateinit var mapKehadiran: HashMap<Int, Kehadiran>
     private lateinit var currentDO: DeliveryOrder
     private var idDO: String? = null
 
@@ -47,9 +48,11 @@ class CreateDOActivity : AppCompatActivity() {
         dbKaryawanHelper = FirestoreHelper()
         dbDOHelper = FirestoreHelper()
         dbPanenSawitLahan = FirestoreHelper()
-        listKaryawan = ArrayList()
-        listIdKaryawan = ArrayList()
-        listKehadiran = HashMap()
+        mapKehadiran = HashMap()
+
+        val karyawanMap = MyConstants.getAllKaryawan(this)
+        listKaryawan = ArrayList(karyawanMap.values)
+        listIdKaryawan = ArrayList(karyawanMap.keys)
         idDO = intent.getStringExtra(ID_DO_EXTRA)
 
         btn_activityCreateDO_tambahLahanPanen.setOnClickListener {
@@ -98,8 +101,9 @@ class CreateDOActivity : AppCompatActivity() {
 
         val btnSave = dialogView.findViewById<Button>(R.id.btn_dialogTambahLahanPanen_save)
         val spinLahan = dialogView.findViewById<Spinner>(R.id.spinner_dialogTambahLahanPanen_lahan)
-        val lahanArray = concatArray(arrayOf("Pilih Lahan"), MyConstants.LAHAN)
-        val spinArrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, lahanArray)
+        val spinArrayAdapter = ArrayAdapter<String>(this,
+            android.R.layout.simple_spinner_dropdown_item,
+            MyConstants.getLahanArrayList(this, true))
         spinLahan.adapter = spinArrayAdapter
         val etBeratBersih = dialogView.findViewById<EditText>(R.id.et_dialogTambahLahanPanen_beratBersih)
         val etBeratBrondol = dialogView.findViewById<EditText>(R.id.et_dialogTambahLahanPanen_beratBrondol)
@@ -108,15 +112,17 @@ class CreateDOActivity : AppCompatActivity() {
 
         // SIAPKAN RECYCLER VIEW KEHADIRAN KARYAWAN
         val linearLayoutManager = LinearLayoutManager(this)
-        adapterKehadiran = ListKaryawamAdapter(this)
+        adapterKehadiran =
+            ListKaryawanAdapter(this)
+        adapterKehadiran.setData(listKaryawan)
         adapterKehadiran.setOnHadirListenerCallback { i, position ->
             val idKaryawan = listIdKaryawan.get(position)
             when (i) {
-                0 -> listKehadiran.remove(position)
-                1 -> listKehadiran.put(position, Kehadiran(idKaryawan, MyConstants.POSISI_PENGANGKUT))
-                2 -> listKehadiran.put(position, Kehadiran(idKaryawan, MyConstants.POSISI_PEMANEN))
-                3 -> listKehadiran.put(position, Kehadiran(idKaryawan, MyConstants.POSISI_SOPIR))
-                4 -> listKehadiran.put(position, Kehadiran(idKaryawan, MyConstants.POSISI_BRONDOL))
+                0 -> mapKehadiran.remove(position)
+                1 -> mapKehadiran.put(position, Kehadiran(idKaryawan, MyConstants.POSISI_PENGANGKUT))
+                2 -> mapKehadiran.put(position, Kehadiran(idKaryawan, MyConstants.POSISI_PEMANEN))
+                3 -> mapKehadiran.put(position, Kehadiran(idKaryawan, MyConstants.POSISI_SOPIR))
+                4 -> mapKehadiran.put(position, Kehadiran(idKaryawan, MyConstants.POSISI_BRONDOL))
             }
         }
         rvKehadiran.layoutManager = linearLayoutManager
@@ -140,7 +146,7 @@ class CreateDOActivity : AppCompatActivity() {
                 // SIAPKAN MODEL PANEN LAHAN SAWIT UNTUK DITULIS KE DB
                 val beratBersih = etBeratBersih.text.toString().toFloat()
                 val beratBrondol = etBeratBrondol.text.toString().toFloat()
-                val kehadiran = ArrayList(listKehadiran.values)
+                val kehadiran = ArrayList(mapKehadiran.values)
                 saveToDb(PanenSawitLahan(lahan, kehadiran, beratBersih, beratBrondol))
                 alertDialog.dismiss()
             }
@@ -151,15 +157,6 @@ class CreateDOActivity : AppCompatActivity() {
                 Toast.makeText(this, "Error tidak dikenal", Toast.LENGTH_SHORT).show()
             }
         }
-
-        readKaryawanDb()
-    }
-
-    private fun concatArray(init: Array<String>, lahan: Array<String>): ArrayList<String> {
-        val lahanArray = ArrayList<String>()
-        lahanArray.addAll(init)
-        lahanArray.addAll(lahan)
-        return lahanArray
     }
 
     private fun saveToDb(lahanPanen: PanenSawitLahan){
@@ -175,26 +172,6 @@ class CreateDOActivity : AppCompatActivity() {
         dbDOHelper.writeValue(currentDO)
 
         // CLEAR LIST KEHADIRAN
-        listKehadiran.clear()
-    }
-
-    private fun readKaryawanDb(){
-        // BACA DATA KARYAWAN UNTUK DITAMPILKAN KE KEHADIRAN
-        dbKaryawanHelper.setReference(Karyawan.KARYAWAN_DB_REFERENCE).addOnceListValuesEventListenerCallback(object :
-            IDatabaseHelper.ListValuesEventListenerCallback<Karyawan> {
-            override fun onDataUpdate(values: ArrayList<Karyawan>?, ids: ArrayList<String>?) {
-                if (values != null && ids != null) {
-                    if (values.size != 0 && ids.size != 0) {
-                        listIdKaryawan.clear()
-                        listIdKaryawan.addAll(ids)
-                        adapterKehadiran.setData(values)
-                    }
-                }
-            }
-
-            override fun onListValueEventListenerCancelled(errorMessage: String?) {
-                Log.e(TAG, "onListValueEventListenerCancelled:$errorMessage")
-            }
-        }, Karyawan::class.java)
+        mapKehadiran.clear()
     }
 }

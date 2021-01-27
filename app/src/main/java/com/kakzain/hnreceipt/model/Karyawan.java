@@ -7,22 +7,18 @@ import java.util.List;
 
 public class Karyawan {
     public static final String KARYAWAN_DB_REFERENCE = "karyawan";
+    public static final String NAMA_COLUMN = "nama";
+
     private String nama;
-    private int posisi; // id_posisi
 
     public Karyawan() {
     }
 
-    public Karyawan(String nama, int posisi) {
+    public Karyawan(String nama) {
         this.nama = nama;
-        this.posisi = posisi;
     }
 
     public String getNama() {
         return nama;
-    }
-
-    public int getPosisi() {
-        return posisi;
     }
 }
