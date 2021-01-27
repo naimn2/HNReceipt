@@ -115,14 +115,15 @@ class CreateDOActivity : AppCompatActivity() {
         adapterKehadiran =
             ListKaryawanAdapter(this)
         adapterKehadiran.setData(listKaryawan)
+
+        // ON POSISI SPINNER LISTENER CALLBACK
         adapterKehadiran.setOnHadirListenerCallback { i, position ->
-            val idKaryawan = listIdKaryawan.get(position)
-            when (i) {
-                0 -> mapKehadiran.remove(position)
-                1 -> mapKehadiran.put(position, Kehadiran(idKaryawan, MyConstants.POSISI_PENGANGKUT))
-                2 -> mapKehadiran.put(position, Kehadiran(idKaryawan, MyConstants.POSISI_PEMANEN))
-                3 -> mapKehadiran.put(position, Kehadiran(idKaryawan, MyConstants.POSISI_SOPIR))
-                4 -> mapKehadiran.put(position, Kehadiran(idKaryawan, MyConstants.POSISI_BRONDOL))
+            val idKaryawan = listIdKaryawan[position]
+            val posisiKeys = ArrayList<Int>(MyConstants.getAllPosisi(this).keys)
+            if (i == 0){
+                mapKehadiran.remove(position)
+            } else {
+                mapKehadiran[position] = Kehadiran(idKaryawan, posisiKeys[i-1])
             }
         }
         rvKehadiran.layoutManager = linearLayoutManager

@@ -15,4 +15,5 @@
     <string name="tutup">Tutup</string>
     <string name="jumlah_hadir_default">0 Hadir</string>
     <string name="lahan">Lahan</string>
+    <string name="buat_do">Delivery Order</string>
 </resources>
