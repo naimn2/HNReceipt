@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/normal_margin"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/normal_margin">
+
+            <TextView
+                android:id="@+id/tv_itemListDO_tanggal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/very_high_margin"
+                android:layout_marginTop="@dimen/normal_margin"
+                android:text="27 Mei 1999"
+                android:textColor="@color/darkGray"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/tv_itemListDO_draft"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_itemListDO_draft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/very_high_margin"
+                android:layout_marginTop="@dimen/normal_margin"
+                android:text="Draft"
+                android:textColor="@color/lightGray"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/tv_itemListDO_jumlahHadir"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_margin="@dimen/normal_margin"-->
+    <!--        android:text="@string/jumlah_hadir_default"-->
+    <!--        android:textColor="@color/lightGray"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/tv_itemListDO_tanggal" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/tv_itemListDO_beratBersihLabel"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="@dimen/very_high_margin"-->
+    <!--        android:layout_marginTop="@dimen/normal_margin"-->
+    <!--        android:text="0 Lahan Sawit Panen"/>-->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_itemListDO_jumlahPanenLabel"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/very_high_margin"
+                android:layout_marginBottom="@dimen/high_margin"
+                android:text="Jumlah Lahan Sawit Panen"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_itemListDO_jumlahPanen"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/very_high_margin"
+                android:layout_marginEnd="@dimen/very_high_margin"
+                android:paddingStart="@dimen/very_high_margin"
+                android:text="0 Lahan"
+                android:textColor="#0073FF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_itemListDO_jumlahPanenLabel"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_itemListDO_beratTotalLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/very_high_margin"
+                android:layout_marginTop="@dimen/normal_margin"
+                android:layout_marginBottom="@dimen/high_margin"
+                android:layout_weight="2"
+                android:text="@string/berat_total"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_itemListDO_jumlahPanenLabel" />
+
+            <TextView
+                android:id="@+id/tv_itemListDO_beratTotal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/high_margin"
+                android:layout_marginEnd="@dimen/very_high_margin"
+                android:paddingStart="@dimen/very_high_margin"
+                android:text="0 Kg"
+                android:textColor="#0073FF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tv_itemListDO_jumlahPanen"
+                app:layout_constraintTop_toTopOf="@+id/tv_itemListDO_beratTotalLabel" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/view_itemListDO_divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_thin"
+            android:background="@color/veryLightGray"/>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pb_itemListDO_loadMore"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
+</LinearLayout>

@@ -14,16 +14,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class MyConstants { // should be put in local db that synchronized with server db
     private static final String TAG = MyConstants.class.getSimpleName();
-    public static final String[] POSISI = new String[]{"AKT","PN","SP","BR"};
+//    public static final String[] POSISI = new String[]{"AKT","PN","SP","BR"};
 
-    public static List<String> getLahanArrayList(Context context, boolean hint){
+    public static List<String> getLahanArrayList(@Nonnull Context context, @Nullable String hint){
         ILokalHelper<Lahan> lokalLahan = new LokalHelper<>(context, LokalHelper.DB_WHICH_LAHAN);
         lokalLahan.open();
         List<String> namaLahanArray = new ArrayList<>();
-        if (hint) {
-            namaLahanArray.add("Pilih Lahan");
+        if (hint != null) {
+            namaLahanArray.add(hint);
         }
         if (!lokalLahan.isEmpty()){
             Map<String, Lahan> mapLahan = lokalLahan.getItems(Lahan.class);
@@ -35,7 +38,7 @@ public class MyConstants { // should be put in local db that synchronized with s
         return namaLahanArray;
     }
 
-    public static Map<String, Karyawan> getAllKaryawan(Context context){
+    public static Map<String, Karyawan> getAllKaryawan(@Nonnull Context context){
         ILokalHelper<Karyawan> lokalKaryawan = new LokalHelper<>(context, LokalHelper.DB_WHICH_KARYAWAN);
         lokalKaryawan.open();
         Map<String, Karyawan> karyawanMap = new HashMap<>();
@@ -46,7 +49,7 @@ public class MyConstants { // should be put in local db that synchronized with s
         return karyawanMap;
     }
 
-    public static Map<Integer, Posisi> getAllPosisi(Context context){
+    public static Map<Integer, Posisi> getAllPosisi(@Nonnull Context context){
         ILokalHelper<Posisi> lokalPosisi = new LokalHelper<>(context, LokalHelper.DB_WHICH_POSISI);
         lokalPosisi.open();
         Map<Integer, Posisi> resultMap = new HashMap<>();
@@ -63,5 +66,22 @@ public class MyConstants { // should be put in local db that synchronized with s
         }
         lokalPosisi.close();
         return resultMap;
+    }
+
+    public static List<String> getNamaPosisiList(@Nonnull Context context, @Nullable String hint){
+        ILokalHelper<Posisi> lokalPosisi = new LokalHelper<>(context, LokalHelper.DB_WHICH_POSISI);
+        lokalPosisi.open();
+        List<String> listNamaPosisi = new ArrayList<>();
+        if (hint != null){
+            listNamaPosisi.add(hint);
+        }
+        if (!lokalPosisi.isEmpty()){
+            Map<String, Posisi> posMap = lokalPosisi.getItems(Posisi.class);
+            for (Posisi posisi: posMap.values()){
+                listNamaPosisi.add(posisi.getNamaPosisi());
+            }
+        }
+        lokalPosisi.close();
+        return listNamaPosisi;
     }
 }

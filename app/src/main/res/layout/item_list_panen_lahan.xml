@@ -4,15 +4,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_marginBottom="@dimen/normal_margin"
+    android:background="@color/white">
 
     <TextView
         android:id="@+id/tv_itemListPanenLahan_lahan"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/normal_margin"
+        android:layout_marginStart="@dimen/very_high_margin"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:layout_marginBottom="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/normal_margin"
         android:text="@string/lahan"
         android:textColor="@color/black"
+        android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/tv_itemListPanenLahan_jumlahHadir"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -21,11 +26,60 @@
         android:id="@+id/tv_itemListPanenLahan_jumlahHadir"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/normal_margin"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:layout_marginBottom="@dimen/normal_margin"
+        android:layout_marginStart="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/very_high_margin"
         android:text="@string/jumlah_hadir_default"
         android:textColor="@color/lightGray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_itemListPanenLahan_beratBersihLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/very_high_margin"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:text="@string/berat_bersih"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_itemListPanenLahan_divider" />
+
+    <TextView
+        android:id="@+id/tv_itemListPanenLahan_beratKotorLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/very_high_margin"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:layout_marginBottom="@dimen/high_margin"
+        android:text="@string/berat_brondol"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_itemListPanenLahan_beratBersihLabel" />
+
+    <TextView
+        android:id="@+id/tv_itemListPanenLahan_beratBersih"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:layout_marginStart="@dimen/very_high_margin"
+        android:text="0 Kg"
+        app:layout_constraintStart_toEndOf="@+id/tv_itemListPanenLahan_beratKotorLabel"
+        app:layout_constraintTop_toBottomOf="@+id/view_itemListPanenLahan_divider" />
+
+    <TextView
+        android:id="@+id/tv_itemListPanenLahan_beratBrondol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/very_high_margin"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:layout_marginBottom="@dimen/high_margin"
+        android:text="0 Kg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_itemListPanenLahan_beratKotorLabel"
+        app:layout_constraintTop_toBottomOf="@+id/tv_itemListPanenLahan_beratBersih" />
 
     <View
         android:id="@+id/view_itemListPanenLahan_divider"

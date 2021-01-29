@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,57 +7,10 @@
     tools:context=".activity.MainActivity"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/et_main_nama"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Nama"
-        android:layout_margin="@dimen/normal_margin"/>
-
-    <EditText
-        android:id="@+id/et_main_posisi"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Posisi"
-        android:layout_margin="@dimen/normal_margin"/>
-
-    <Button
-        android:id="@+id/btn_main_save"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Save"/>
-
-    <Button
-        android:id="@+id/btn_main_read"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/purple_200"
-        android:text="Read"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="@dimen/normal_margin"
-        android:layout_marginBottom="@dimen/normal_margin"
-        android:background="@android:color/darker_gray"/>
-
     <TextView
-        android:id="@+id/tv_main_indexAndLength"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0/0"
-        android:layout_margin="@dimen/normal_margin"/>
+        android:text="HULUHALA"
+        android:layout_centerInParent="true"/>
 
-    <TextView
-        android:id="@+id/tv_main_nama"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/normal_margin"/>
-
-    <TextView
-        android:id="@+id/tv_main_posisi"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/normal_margin"/>
-
-</LinearLayout>
+</RelativeLayout>

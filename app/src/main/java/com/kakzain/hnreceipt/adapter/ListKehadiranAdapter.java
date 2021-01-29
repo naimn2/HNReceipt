@@ -19,12 +19,12 @@ import com.kakzain.hnreceipt.model.Karyawan;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ListKaryawanAdapter extends RecyclerView.Adapter<ListKaryawanAdapter.ViewHolder> {
+public class ListKehadiranAdapter extends RecyclerView.Adapter<ListKehadiranAdapter.ViewHolder> {
     private final Context context;
     private ArrayList<Karyawan> listKaryawan;
     private OnClickListenerCallback onHadirListenerCallback;
 
-    public ListKaryawanAdapter(Context context) {
+    public ListKehadiranAdapter(Context context) {
         this.listKaryawan = new ArrayList<>();
         this.context = context;
     }
@@ -41,19 +41,19 @@ public class ListKaryawanAdapter extends RecyclerView.Adapter<ListKaryawanAdapte
 
     @NonNull
     @Override
-    public ListKaryawanAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ListKehadiranAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_list_karyawan, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListKaryawanAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ListKehadiranAdapter.ViewHolder holder, int position) {
         String nama = listKaryawan.get(position).getNama();
         holder.tvNama.setText(nama);
         ArrayAdapter<String> spinHadirAdapter = new ArrayAdapter<>(
                 context,
                 android.R.layout.simple_spinner_dropdown_item,
-                concatArray(new String[]{"T"}, MyConstants.POSISI)
+                MyConstants.getNamaPosisiList(context, "Absen")
         );
         holder.spinHadir.setAdapter(spinHadirAdapter);
         holder.spinHadir.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

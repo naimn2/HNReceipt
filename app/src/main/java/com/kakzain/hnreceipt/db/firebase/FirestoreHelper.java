@@ -26,6 +26,8 @@ import java.util.Random;
 
 public class FirestoreHelper<E> implements IDatabaseHelper<E> {
     private static final String TAG = FirestoreHelper.class.getSimpleName();
+    public static final int ASCENDING_DIRECTION = 0;
+    public static final int DESCENDING_DIRECTION = 1;
     private Class<E> eClass;
 //    private String reference;
     private CollectionReference collectionReference;
@@ -46,6 +48,7 @@ public class FirestoreHelper<E> implements IDatabaseHelper<E> {
 //    }
     public FirestoreHelper(){
         keys = new ArrayList<>();
+
     }
 
     @Override
@@ -100,6 +103,37 @@ public class FirestoreHelper<E> implements IDatabaseHelper<E> {
     @Override
     public IDatabaseHelper<E> addAllKeys(ArrayList<String> keys) {
         this.keys.addAll(keys);
+        return this;
+    }
+
+    @Override
+    public IDatabaseHelper<E> orderBy(String field, int direction) {
+        if (direction == ASCENDING_DIRECTION) {
+            if (queryCollection == null)
+                queryCollection = collectionReference.orderBy(field, Query.Direction.ASCENDING);
+            else
+                queryCollection = queryCollection.orderBy(field, Query.Direction.ASCENDING);
+        } else if (direction == DESCENDING_DIRECTION){
+            if (queryCollection == null)
+                queryCollection = collectionReference.orderBy(field, Query.Direction.DESCENDING);
+            else
+                queryCollection = queryCollection.orderBy(field, Query.Direction.DESCENDING);
+        } else {
+            try {
+                throw new Exception();
+            } catch (Exception e) {
+                Log.e(TAG, "orderBy: No such direction = "+direction);
+            }
+        }
+        return this;
+    }
+
+    @Override
+    public IDatabaseHelper<E> limit(long n) {
+        if (queryCollection == null)
+            queryCollection = collectionReference.limit(n);
+        else
+            queryCollection = queryCollection.limit(n);
         return this;
     }
 

@@ -11,6 +11,8 @@ public interface IDatabaseHelper<E> {
     IDatabaseHelper<E> addExceptCondition(String key, Object value);
     IDatabaseHelper<E> addFilter(String key, String query);
     IDatabaseHelper<E> addAllKeys(ArrayList<String> keys);
+    IDatabaseHelper<E> orderBy(String field, int direction);
+    IDatabaseHelper<E> limit(long n);
     IDatabaseHelper<E> clearConditional();
     IDatabaseHelper<E> clearFilter();
     void addListValuesEventListenerCallback(ListValuesEventListenerCallback<E> listValuesEventListenerCallback, Class<E> eClass);

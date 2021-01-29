@@ -30,6 +30,7 @@
         android:id="@+id/view_itemListKaryawan_divider"
         android:layout_width="0dp"
         android:layout_height="@dimen/divider_thin"
+        android:layout_marginEnd="@dimen/normal_margin"
         android:background="@color/veryLightGray"
         app:layout_constraintStart_toStartOf="@+id/tv_itemListKaryawan_nama"
         app:layout_constraintEnd_toStartOf="@+id/spin_itemListKaryawan_check"

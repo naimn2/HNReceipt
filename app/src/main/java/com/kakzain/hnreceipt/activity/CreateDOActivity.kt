@@ -1,8 +1,11 @@
 package com.kakzain.hnreceipt.activity
 
+import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -10,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kakzain.hnreceipt.MyConstants
 import com.kakzain.hnreceipt.R
-import com.kakzain.hnreceipt.adapter.ListKaryawanAdapter
+import com.kakzain.hnreceipt.adapter.ListKehadiranAdapter
 import com.kakzain.hnreceipt.adapter.ListPanenLahanAdapter
 import com.kakzain.hnreceipt.db.IDatabaseHelper
 import com.kakzain.hnreceipt.db.firebase.FirestoreHelper
@@ -27,13 +30,13 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 class CreateDOActivity : AppCompatActivity() {
-    companion object { val ID_DO_EXTRA = "idDOExtra" }
+    companion object { const val ID_DO_EXTRA = "idDOExtra" }
 
     private val TAG = CreateDOActivity::class.java.simpleName
     private lateinit var dbKaryawanHelper: IDatabaseHelper<Karyawan>
     private lateinit var dbDOHelper: IDatabaseHelper<DeliveryOrder>
     private lateinit var dbPanenSawitLahan: IDatabaseHelper<PanenSawitLahan>
-    private lateinit var adapterKehadiran: ListKaryawanAdapter
+    private lateinit var adapterKehadiran: ListKehadiranAdapter
     private lateinit var panenLahanAdapter: ListPanenLahanAdapter
     private lateinit var listKaryawan: ArrayList<Karyawan>
     private lateinit var listIdKaryawan: ArrayList<String>
@@ -44,6 +47,9 @@ class CreateDOActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_d_o)
+
+        setSupportActionBar(toolbar_activityCreateDO)
+        title = getString(R.string.create_do)
 
         dbKaryawanHelper = FirestoreHelper()
         dbDOHelper = FirestoreHelper()
@@ -78,6 +84,10 @@ class CreateDOActivity : AppCompatActivity() {
                         tv_activityCreateDO_tanggal.text = DateFormatter.getDate(value.tanggal.toDate().time)
                         // SHOW BTN ADD LAHAN PANEN
                         btn_activityCreateDO_tambahLahanPanen.visibility = View.VISIBLE
+                        // DISABLE EDIT / ADD LAHAN PANEN IF COMMITTED
+                        if (value.isCommitted){
+                            btn_activityCreateDO_tambahLahanPanen.isEnabled = false
+                        }
                         if (value.panenSawitLahan != null && value.panenSawitLahan.size > 0) {
                             // UPDATE LIST PANEN LAHAN ADAPTER
                             panenLahanAdapter.setData(value.panenSawitLahan)
@@ -103,7 +113,7 @@ class CreateDOActivity : AppCompatActivity() {
         val spinLahan = dialogView.findViewById<Spinner>(R.id.spinner_dialogTambahLahanPanen_lahan)
         val spinArrayAdapter = ArrayAdapter<String>(this,
             android.R.layout.simple_spinner_dropdown_item,
-            MyConstants.getLahanArrayList(this, true))
+            MyConstants.getLahanArrayList(this, "Pilih Lahan"))
         spinLahan.adapter = spinArrayAdapter
         val etBeratBersih = dialogView.findViewById<EditText>(R.id.et_dialogTambahLahanPanen_beratBersih)
         val etBeratBrondol = dialogView.findViewById<EditText>(R.id.et_dialogTambahLahanPanen_beratBrondol)
@@ -113,7 +123,7 @@ class CreateDOActivity : AppCompatActivity() {
         // SIAPKAN RECYCLER VIEW KEHADIRAN KARYAWAN
         val linearLayoutManager = LinearLayoutManager(this)
         adapterKehadiran =
-            ListKaryawanAdapter(this)
+            ListKehadiranAdapter(this)
         adapterKehadiran.setData(listKaryawan)
 
         // ON POSISI SPINNER LISTENER CALLBACK
@@ -174,5 +184,38 @@ class CreateDOActivity : AppCompatActivity() {
 
         // CLEAR LIST KEHADIRAN
         mapKehadiran.clear()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_toolbar_create_d_o, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.item_menuToolbarCreateDO_cetakDO){
+            showDialogPublishDOconfirmation()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun showDialogPublishDOconfirmation() {
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.cetak_do))
+            .setMessage(getString(R.string.cetak_do_message_confirmation))
+            .setIcon(R.drawable.ic_baseline_event_note_24)
+            .setPositiveButton(R.string.ya, object : DialogInterface.OnClickListener {
+                override fun onClick(p0: DialogInterface?, p1: Int) {
+                    Toast.makeText(applicationContext, "DO Dicetak", Toast.LENGTH_SHORT).show()
+                    currentDO.isCommitted = true
+                    dbDOHelper.writeValue(currentDO)
+                    TODO("Update UI + push ke db cetakan DO / gaji karyawan")
+                }
+            })
+            .setNegativeButton(R.string.batal, object : DialogInterface.OnClickListener {
+                override fun onClick(p0: DialogInterface?, p1: Int) {
+                    // Nothing
+                }
+            })
+            .show()
     }
 }

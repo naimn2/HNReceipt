@@ -2,11 +2,14 @@ package com.kakzain.hnreceipt.model;
 
 import com.google.firebase.Timestamp;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class DeliveryOrder{
     public static final String DO_DB_REFERENCE = "delivery_order";
+    public static final String TANGGAL_KEY = "tanggal";
 
     private List<PanenSawitLahan> panenSawitLahan;
     private float beratTotal;
@@ -14,6 +17,7 @@ public class DeliveryOrder{
     private int hargaSawit;
     private long upah;
     private float refaksi;
+    private boolean isCommitted;
 
     public DeliveryOrder() {
         panenSawitLahan = new ArrayList<>();
@@ -26,6 +30,7 @@ public class DeliveryOrder{
         this.hargaSawit = hargaSawit;
         this.upah = upah;
         this.refaksi = refaksi;
+        isCommitted = false;
     }
 
     public void setPanenSawitLahan(List<PanenSawitLahan> panenSawitLahan) {
@@ -34,6 +39,14 @@ public class DeliveryOrder{
 
     public void setBeratTotal(float beratTotal) {
         this.beratTotal = beratTotal;
+    }
+
+    public void setCommitted(boolean committed) {
+        isCommitted = committed;
+    }
+
+    public boolean isCommitted() {
+        return isCommitted;
     }
 
     public List<PanenSawitLahan> getPanenSawitLahan() {

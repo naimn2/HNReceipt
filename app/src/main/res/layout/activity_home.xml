@@ -1,16 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.HomeActivity">
+    tools:context=".activity.HomeActivity"
+    android:background="@color/background">
 
     <Button
         android:id="@+id/btn_activityHome_buatDO"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_margin="@dimen/normal_margin"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:gravity="bottom|end"
+        android:paddingTop="@dimen/high_margin"
+        android:paddingEnd="@dimen/high_margin"
+        android:paddingBottom="@dimen/high_margin"
+        android:paddingStart="@dimen/very_high_margin"
+        android:text="Buat Delivery Order Baru >>"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:elevation="@dimen/normal_margin"
+        android:onClick="createDOHandler"
+        android:drawableLeft="@drawable/ic_baseline_add_circle_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_activityHome_daftarDO"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_margin="@dimen/normal_margin"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:gravity="bottom|end"
+        android:paddingTop="@dimen/high_margin"
+        android:paddingEnd="@dimen/high_margin"
+        android:paddingBottom="@dimen/high_margin"
+        android:paddingStart="@dimen/very_high_margin"
+        android:drawableLeft="@drawable/ic_baseline_filter_list_white"
+        android:text="Riwayat Delivery Order >>"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:backgroundTint="@color/teal_700"
+        android:elevation="@dimen/normal_margin"
+        android:onClick="daftarDOHandler"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_activityHome_buatDO" />
+
+    <Button
+        android:id="@+id/btn_activityHome_daftarKaryawan"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/normal_margin"
-        android:text="@string/create_do"/>
+        android:padding="@dimen/high_margin"
+        android:text="Daftar Karyawan"
+        android:gravity="start|center_vertical"
+        android:textAllCaps="false"
+        android:textColor="@color/darkGray"
+        android:elevation="@dimen/very_high_margin"
+        android:backgroundTint="@color/white"
+        android:onClick="daftarKaryawanHandler"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_activityHome_daftarDO" />
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/btn_activityHome_daftarLahan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/normal_margin"
+        android:padding="@dimen/high_margin"
+        android:text="Daftar Lahan"
+        android:gravity="start|center_vertical"
+        android:textAllCaps="false"
+        android:textColor="@color/darkGray"
+        android:elevation="@dimen/very_high_margin"
+        android:backgroundTint="@color/white"
+        android:onClick="daftarLahanHandler"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_activityHome_daftarKaryawan" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
