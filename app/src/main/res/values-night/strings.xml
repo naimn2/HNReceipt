@@ -45,4 +45,8 @@
     <string name="hapus_item_message_confirmation">Apakah anda yakin ingin menghapus?</string>
     <string name="uncomplete_do">Cetak Delivery Order Gagal</string>
     <string name="uncomplete_do_alert_message">Anda belum melengkapi keterangan Delivery Order</string>
+    <string name="hint_upah_sopir">Persen dari harga omzet</string>
+    <string name="upah_pemanen">Pemanen</string>
+    <string name="upah_pemanen_pengangkut">Upah Pemanen /\nPengangkut</string>
+    <string name="upah_pengangkut">Upah Pengangkut</string>
 </resources>

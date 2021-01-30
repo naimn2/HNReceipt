@@ -2,6 +2,7 @@ package com.kakzain.hnreceipt.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -19,14 +20,17 @@ import com.kakzain.hnreceipt.db.IDatabaseHelper
 import com.kakzain.hnreceipt.db.firebase.FirestoreHelper
 import com.kakzain.hnreceipt.helper.CurrencyFormatter
 import com.kakzain.hnreceipt.helper.DateFormatter
+import com.kakzain.hnreceipt.helper.UnitValidator
 import com.kakzain.hnreceipt.model.*
 import kotlinx.android.synthetic.main.activity_create_d_o.*
 import kotlinx.android.synthetic.main.dialog_form_input_d_o_more_info_detail.*
 import java.lang.Exception
 import java.lang.NumberFormatException
+import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import kotlin.math.roundToInt
 
 class CreateDOActivity : AppCompatActivity() {
     companion object { const val ID_DO_EXTRA = "idDOExtra" }
@@ -203,6 +207,7 @@ class CreateDOActivity : AppCompatActivity() {
     }
 
     private fun showDialogFormInputDOmoreInformationDetail(){
+        // INIT VIEW
         val mView = layoutInflater.inflate(R.layout.dialog_form_input_d_o_more_info_detail,
                 null, false)
         val etRefaksi = mView.findViewById<EditText>(R.id.et_dialogDOMoreInfo_refaksi)
@@ -212,21 +217,41 @@ class CreateDOActivity : AppCompatActivity() {
         val etUpahBrondol = mView.findViewById<EditText>(R.id.et_dialogDOMoreInfo_upahBrondol)
         val rvListSopir = mView.findViewById<RecyclerView>(R.id.rv_dialogDOMoreInfo_listKaryawanSopir)
 
-//        etRefaksi.addTextChangedListener {
-//            Log.d(TAG, "showDialogFormInputDOmoreInformationDetail: ${it?.toString()!!.toFloat()/100}")
-//        }
+        etRefaksi.setText(UnitValidator.validateUnitPercent((currentDO.refaksi*100).roundToInt()), TextView.BufferType.EDITABLE)
+        etHargaSawit.setText(UnitValidator.validateUnitCurrency(currentDO.hargaSawit), TextView.BufferType.EDITABLE)
+        if (currentDO.upah != null) {
+            etUpahKaryawan.setText(
+                UnitValidator.validateUnitCurrency(currentDO.upah[MyConstants.POSISI_PEMANEN_INDEKS].upah.toInt()),
+                TextView.BufferType.EDITABLE
+            )
+            etUpahSopir.setText(
+                UnitValidator.validateUnitPercent((currentDO.upah[MyConstants.POSISI_SOPIR_INDEKS].upah*100).roundToInt()),
+                TextView.BufferType.EDITABLE
+            )
+            etUpahBrondol.setText(
+                UnitValidator.validateUnitCurrency(currentDO.upah[MyConstants.POSISI_BRONDOL_INDEKS].upah.toInt()),
+                TextView.BufferType.EDITABLE
+            )
+        }
+
+        // INIT FOCUS CHANGE LISTENER FOR VALIDATION VALUE
+        initFocusChangeListenerForValidateValue(etRefaksi, etHargaSawit, etUpahKaryawan,
+            etUpahBrondol, etUpahSopir)
 
         // SETUP RECYCLER VIEW LIST SOPIR
         rvListSopir.layoutManager = LinearLayoutManager(this)
-        val listSopirAdapter = ListSopirAdapter(this)
+        val listSopirAdapter = ListSopirAdapter(this, currentDO.sopir)
         rvListSopir.adapter = listSopirAdapter
-        listSopirAdapter.setData(listKaryawan)
-        val listSopir = ArrayList<Kehadiran>()
+        listSopirAdapter.setData(listKaryawan, listIdKaryawan)
+        val mapSopir = HashMap<Int, Kehadiran>()
         // SET ON SOPIR CHECK CHANGE LISTENER
         listSopirAdapter.setOnSopirListenerCallback { b, i ->
             if (b){
-                listSopir.add(Kehadiran(listIdKaryawan[i],
-                        MyConstants.getNamaPosisiIndeks(this)["Sopir"]!!))
+                mapSopir[i] = Kehadiran(listIdKaryawan[i],
+                    MyConstants.getNamaPosisiIndeks(this)["Sopir"]!!)
+                Log.d(TAG, "map sopir size: ${mapSopir.size}")
+            } else {
+                mapSopir.remove(i)
             }
         }
         // BUILD ALERT DIALOG DO MORE DETAILS
@@ -236,23 +261,28 @@ class CreateDOActivity : AppCompatActivity() {
         // ADD ON CETAK DO BUTTON CLICK LISTENER
         mView.findViewById<Button>(R.id.btn_dialogDOMoreInfo_saveDO).setOnClickListener {
             try {
-                val refaksi = etRefaksi.text.toString().toFloat()/100
-                val hargaSawit = etHargaSawit.text.toString().toInt()
+                val refaksi = BigDecimal(UnitValidator.unitPercentToInt(
+                    etRefaksi.text.toString())).divide(BigDecimal("100"))
+                val hargaSawit = UnitValidator.unitCurrencytoInt(etHargaSawit.text.toString())
                 // PERHATIKAN URUTAN UPAH
-                val upahPemanen = Upah(0, etUpahKaryawan.text.toString().toFloat())
-                val upahPengangkut =  Upah(1, etUpahKaryawan.text.toString().toFloat())
-                val upahSopir = Upah(2, etUpahSopir.text.toString().toFloat().div(100))
-                val upahBrondol = Upah(3, etUpahBrondol.text.toString().toFloat())
+                val upahPemanen = Upah(MyConstants.POSISI_PEMANEN_INDEKS, UnitValidator.unitCurrencytoInt(
+                    etUpahKaryawan.text.toString()).toFloat())
+                val upahPengangkut =  Upah(MyConstants.POSISI_PENGANGKUT_INDEKS, UnitValidator.unitCurrencytoInt(
+                    etUpahKaryawan.text.toString()).toFloat())
+                val upahSopir = Upah(MyConstants.POSISI_SOPIR_INDEKS, (BigDecimal(UnitValidator.unitPercentToInt(
+                    etUpahSopir.text.toString())).divide(BigDecimal("100"))).toFloat())
+                val upahBrondol = Upah(MyConstants.POSISI_BRONDOL_INDEKS, UnitValidator.unitCurrencytoInt(
+                    etUpahBrondol.text.toString()).toFloat())
                 val upah = ArrayList<Upah>()
                 upah.add(upahPemanen)
                 upah.add(upahPengangkut)
                 upah.add(upahSopir)
                 upah.add(upahBrondol)
                 updateCurrentDOMoreDetail(
-                        refaksi,
+                        refaksi.toFloat(),
                         hargaSawit,
                         upah,
-                        listSopir
+                        ArrayList<Kehadiran>(mapSopir.values)
                 )
                 alertDialog.dismiss()
             } catch (err: NumberFormatException){
@@ -285,7 +315,7 @@ class CreateDOActivity : AppCompatActivity() {
                 .setIcon(R.drawable.ic_task_complete)
                 .setPositiveButton(R.string.ya_caps) { _, _ ->
                     // UPDATE DO STATUS TO 'COMMITTED'
-                    if (!currentDO.isComplete){
+                    if (!currentDO.hasComplete()){
                         showDialogUnCompleteDO()
                         return@setPositiveButton
                     }
@@ -393,6 +423,67 @@ class CreateDOActivity : AppCompatActivity() {
                 // do nothing
             }
             .show()
+    }
+
+    private fun initFocusChangeListenerForValidateValue(
+        etRefaksi: EditText, etHargaSawit: EditText, etUpahKaryawan: EditText,
+        etUpahBrondol: EditText, etUpahSopir: EditText
+    ){
+        etRefaksi.setOnFocusChangeListener { _, b ->
+            val it = etRefaksi.text
+            if (!b && !TextUtils.isEmpty(it)){
+                val currentValue = UnitValidator.unitPercentToInt(it?.toString())
+                Log.d(TAG, "toInt: ${currentValue}")
+                etRefaksi.setText(
+                    UnitValidator.validateUnitPercent(currentValue),
+                    TextView.BufferType.EDITABLE
+                )
+            }
+        }
+        etHargaSawit.setOnFocusChangeListener { _, b ->
+            val it = etHargaSawit.text
+            if (!b && !TextUtils.isEmpty(it)){
+                val currentValue = UnitValidator.unitCurrencytoInt(it?.toString())
+                Log.d(TAG, "toInt: ${currentValue}")
+                etHargaSawit.setText(
+                    UnitValidator.validateUnitCurrency(currentValue),
+                    TextView.BufferType.EDITABLE
+                )
+            }
+        }
+        etUpahKaryawan.setOnFocusChangeListener { _, b ->
+            val it = etUpahKaryawan.text
+            if (!b && !TextUtils.isEmpty(it)){
+                val currentValue = UnitValidator.unitCurrencytoInt(it?.toString())
+                Log.d(TAG, "toInt: ${currentValue}")
+                etUpahKaryawan.setText(
+                    UnitValidator.validateUnitCurrency(currentValue),
+                    TextView.BufferType.EDITABLE
+                )
+            }
+        }
+        etUpahSopir.setOnFocusChangeListener { _, b ->
+            val it = etUpahSopir.text
+            if (!b && !TextUtils.isEmpty(it)){
+                val currentValue = UnitValidator.unitPercentToInt(it?.toString())
+                Log.d(TAG, "toInt: ${currentValue}")
+                etUpahSopir.setText(
+                    UnitValidator.validateUnitPercent(currentValue),
+                    TextView.BufferType.EDITABLE
+                )
+            }
+        }
+        etUpahBrondol.setOnFocusChangeListener { _, b ->
+            val it = etUpahBrondol.text
+            if (!b && !TextUtils.isEmpty(it)){
+                val currentValue = UnitValidator.unitCurrencytoInt(it?.toString())
+                Log.d(TAG, "toInt: ${currentValue}")
+                etUpahBrondol.setText(
+                    UnitValidator.validateUnitCurrency(currentValue),
+                    TextView.BufferType.EDITABLE
+                )
+            }
+        }
     }
 
     private fun setEditableViewDO(b: Boolean) {

@@ -17,6 +17,10 @@ import javax.annotation.Nullable;
 
 public class MyConstants {
     private static final String TAG = MyConstants.class.getSimpleName();
+    public static final int POSISI_PEMANEN_INDEKS = 0;
+    public static final int POSISI_PENGANGKUT_INDEKS = 1;
+    public static final int POSISI_SOPIR_INDEKS = 2;
+    public static final int POSISI_BRONDOL_INDEKS = 3;
 
     public static List<String> getLahanArrayList(@Nonnull Context context, @Nullable String hint){
         ILokalHelper<Lahan> lokalLahan = new LokalHelper<>(context, LokalHelper.DB_WHICH_LAHAN);

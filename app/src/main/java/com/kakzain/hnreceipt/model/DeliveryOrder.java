@@ -31,19 +31,6 @@ public class DeliveryOrder{
 //    private int upahBrondol;
     private List<Upah> upah;
 
-    private List<Object> toList(){
-        List<Object> values = new ArrayList<>();
-        values.add(panenSawitLahan);
-        values.add(sopir);
-        values.add(beratTotal);
-        values.add(tanggal);
-        values.add(hargaSawit);
-        values.add(refaksi);
-        values.add(isCommitted);
-        values.add(upah);
-        return values;
-    }
-
     public DeliveryOrder() {
         panenSawitLahan = new ArrayList<>();
     }
@@ -137,7 +124,7 @@ public class DeliveryOrder{
         return refaksi;
     }
 
-    public boolean isComplete(){
+    public boolean hasComplete(){
         for (Object obj: toList()){
             try {
                 if (obj == null) {
@@ -150,5 +137,18 @@ public class DeliveryOrder{
             } catch (NumberFormatException ignored){}
         }
         return true;
+    }
+
+    private List<Object> toList(){
+        List<Object> values = new ArrayList<>();
+        values.add(panenSawitLahan);
+        values.add(sopir);
+        values.add(beratTotal);
+        values.add(tanggal);
+        values.add(hargaSawit);
+        values.add(refaksi);
+        values.add(isCommitted);
+        values.add(upah);
+        return values;
     }
 }
