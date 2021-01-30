@@ -22,18 +22,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/iv_itemListPanenLahan_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/high_margin"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:src="@drawable/ic_baseline_more_vert_24"
+        android:contentDescription="@string/more"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <TextView
         android:id="@+id/tv_itemListPanenLahan_jumlahHadir"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/normal_margin"
-        android:layout_marginBottom="@dimen/normal_margin"
-        android:layout_marginStart="@dimen/normal_margin"
         android:layout_marginEnd="@dimen/very_high_margin"
+        android:layout_marginBottom="@dimen/high_margin"
         android:text="@string/jumlah_hadir_default"
         android:textColor="@color/lightGray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         android:id="@+id/tv_itemListPanenLahan_beratBersihLabel"

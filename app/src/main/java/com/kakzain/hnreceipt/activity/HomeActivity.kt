@@ -19,7 +19,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     fun createDOHandler(view: View) {
-        val mDO = DeliveryOrder(null, 0.0f, Timestamp(Date()), 0, 180, 0.0f)
+        val mDO = DeliveryOrder(null, 0, 0.0f, 0.0f, Date(), null, null)
         val id: String = FirestoreHelper<DeliveryOrder>().setReference(DeliveryOrder.DO_DB_REFERENCE).pushWriteValue(mDO)
         Toast.makeText(this, "DO baru telah dibuat", Toast.LENGTH_SHORT).show()
         val mIntent = Intent(this, CreateDOActivity::class.java)

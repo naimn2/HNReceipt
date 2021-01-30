@@ -1,144 +1,188 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <Spinner
-        android:id="@+id/spinner_dialogTambahLahanPanen_lahan"
+    <TextView
+        android:id="@+id/tv_dialogTambahLahanPanen_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/normal_margin"
-        android:spinnerMode="dropdown"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/view1"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_thin"
-        android:background="@color/veryLightGray"
-        android:layout_marginTop="@dimen/normal_margin"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_dialogTambahLahanPanen_lahan" />
-
-    <TextView
-        android:id="@+id/tv_dialogTambahLahanPanen_labelBeratBersih"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/normal_margin"
-        android:text="@string/berat_bersih"
-        app:layout_constraintBottom_toBottomOf="@+id/et_dialogTambahLahanPanen_beratBersih"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/et_dialogTambahLahanPanen_beratBersih" />
-
-    <EditText
-        android:id="@+id/et_dialogTambahLahanPanen_beratBersih"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/normal_margin"
-        android:layout_marginTop="@dimen/normal_margin"
-        android:hint="@string/berat_total_default"
-        android:inputType="numberDecimal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/et_dialogTambahLahanPanen_beratBrondol"
-        app:layout_constraintTop_toTopOf="@+id/view1" />
-
-    <TextView
-        android:id="@+id/tv_dialogTambahLahanPanen_labelBeratBrondol"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/normal_margin"
-        android:text="@string/berat_brondol"
-        app:layout_constraintBottom_toBottomOf="@+id/et_dialogTambahLahanPanen_beratBrondol"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/et_dialogTambahLahanPanen_beratBrondol" />
-
-    <EditText
-        android:id="@+id/et_dialogTambahLahanPanen_beratBrondol"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/high_margin"
-        android:layout_marginTop="@dimen/normal_margin"
-        android:layout_marginEnd="@dimen/normal_margin"
-        android:hint="@string/berat_total_default"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_dialogTambahLahanPanen_labelBeratBrondol"
-        app:layout_constraintTop_toBottomOf="@+id/et_dialogTambahLahanPanen_beratBersih"
-        android:inputType="numberDecimal" />
-
-    <View
-        android:id="@+id/view2"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_thin"
-        android:background="@color/veryLightGray"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_dialogTambahLahanPanen_beratBrondol" />
-
-    <TextView
-        android:id="@+id/tv_labelKehadiran"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/normal_margin"
+        android:layout_marginStart="@dimen/very_high_margin"
+        android:layout_marginEnd="@dimen/very_high_margin"
         android:layout_marginTop="@dimen/high_margin"
-        android:text="@string/kehadiran"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2"/>
+        android:layout_marginBottom="@dimen/high_margin"
+        android:textSize="18sp"
+        android:drawablePadding="@dimen/high_margin"
+        android:textColor="@color/darkGray"
+        android:text="@string/tambah_lahan_panen"
+        app:drawableStartCompat="@drawable/ic_baseline_note_add_24" />
 
     <View
-        android:id="@+id/view3"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/divider_thin"
-        android:layout_marginTop="@dimen/high_margin"
-        android:background="@color/veryLightGray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_labelKehadiran" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_dialogTambahLahanPanen_kehadiranKaryawan"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/normal_margin"
-        android:layout_marginEnd="@dimen/normal_margin"
-        tools:listitem="@layout/item_list_karyawan"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view3" />
-
-    <View
-        android:id="@id/view4"
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_thin"
-        android:background="@color/veryLightGray"
-        app:layout_constraintTop_toBottomOf="@+id/rv_dialogTambahLahanPanen_kehadiranKaryawan" />
+        android:background="@color/lightGray"
+        android:layout_below="@+id/tv_dialogTambahLahanPanen_title"/>
 
-    <Button
-        android:id="@+id/btn_dialogTambahLahanPanen_save"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/normal_margin"
-        android:text="@string/tambah"
-        android:textAllCaps="false"
-        android:backgroundTint="@color/teal_700"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view4"/>
+        android:paddingStart="@dimen/high_margin"
+        android:paddingEnd="@dimen/high_margin"
+        android:layout_below="@id/tv_dialogTambahLahanPanen_title"
+        android:layout_above="@id/cl_dialogTambahLahanPanen_bottom">
 
-    <TextView
-        android:id="@+id/tv_dialogTambahLahanPanen_tutup"
-        android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Spinner
+                android:id="@+id/spinner_dialogTambahLahanPanen_lahan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/normal_margin"
+                android:spinnerMode="dropdown"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/view1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_thin"
+                android:layout_marginTop="@dimen/normal_margin"
+                android:background="@color/veryLightGray"
+                app:layout_constraintTop_toBottomOf="@+id/spinner_dialogTambahLahanPanen_lahan" />
+
+            <TextView
+                android:id="@+id/tv_dialogTambahLahanPanen_labelBeratBersih"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/normal_margin"
+                android:text="@string/berat_bersih"
+                app:layout_constraintBottom_toBottomOf="@+id/et_dialogTambahLahanPanen_beratBersih"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/et_dialogTambahLahanPanen_beratBersih" />
+
+            <EditText
+                android:id="@+id/et_dialogTambahLahanPanen_beratBersih"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
+                android:hint="@string/berat_total_default"
+                android:inputType="numberDecimal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/et_dialogTambahLahanPanen_beratBrondol"
+                app:layout_constraintTop_toTopOf="@+id/view1" />
+
+            <TextView
+                android:id="@+id/tv_dialogTambahLahanPanen_labelBeratBrondol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/normal_margin"
+                android:text="@string/berat_brondol"
+                app:layout_constraintBottom_toBottomOf="@+id/et_dialogTambahLahanPanen_beratBrondol"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/et_dialogTambahLahanPanen_beratBrondol" />
+
+            <EditText
+                android:id="@+id/et_dialogTambahLahanPanen_beratBrondol"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/high_margin"
+                android:layout_marginTop="@dimen/normal_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
+                android:hint="@string/berat_total_default"
+                android:inputType="numberDecimal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_dialogTambahLahanPanen_labelBeratBrondol"
+                app:layout_constraintTop_toBottomOf="@+id/et_dialogTambahLahanPanen_beratBersih" />
+
+            <View
+                android:id="@+id/view2"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_thin"
+                android:background="@color/veryLightGray"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_dialogTambahLahanPanen_beratBrondol" />
+
+            <TextView
+                android:id="@+id/tv_labelKehadiran"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginTop="@dimen/high_margin"
+                android:text="@string/kehadiran"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+            <View
+                android:id="@+id/view3"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/divider_thin"
+                android:layout_marginTop="@dimen/high_margin"
+                android:background="@color/veryLightGray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_labelKehadiran" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_dialogTambahLahanPanen_kehadiranKaryawan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view3"
+                tools:listitem="@layout/item_list_karyawan" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_dialogTambahLahanPanen_bottom"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/tutup"
-        android:textColor="@color/lightGray"
-        android:layout_margin="@dimen/normal_margin"
-        android:paddingBottom="@dimen/high_margin"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_dialogTambahLahanPanen_save" />
+        android:layout_alignParentBottom="true">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <View
+            android:id="@id/view4"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_thin"
+            android:background="@color/lightGray"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_dialogTambahLahanPanen_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/normal_margin"
+            android:backgroundTint="@color/teal_700"
+            android:text="@string/tambah"
+            android:textAllCaps="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view4" />
+
+        <TextView
+            android:id="@+id/tv_dialogTambahLahanPanen_tutup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/normal_margin"
+            android:paddingBottom="@dimen/high_margin"
+            android:text="@string/tutup"
+            android:textColor="@color/lightGray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_dialogTambahLahanPanen_save" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>

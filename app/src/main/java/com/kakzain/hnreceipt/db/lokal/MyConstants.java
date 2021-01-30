@@ -1,10 +1,8 @@
-package com.kakzain.hnreceipt;
+package com.kakzain.hnreceipt.db.lokal;
 
 import android.content.Context;
 import android.util.Log;
 
-import com.kakzain.hnreceipt.db.lokal.ILokalHelper;
-import com.kakzain.hnreceipt.db.lokal.LokalHelper;
 import com.kakzain.hnreceipt.model.Karyawan;
 import com.kakzain.hnreceipt.model.Lahan;
 import com.kakzain.hnreceipt.model.Posisi;
@@ -17,9 +15,8 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class MyConstants { // should be put in local db that synchronized with server db
+public class MyConstants {
     private static final String TAG = MyConstants.class.getSimpleName();
-//    public static final String[] POSISI = new String[]{"AKT","PN","SP","BR"};
 
     public static List<String> getLahanArrayList(@Nonnull Context context, @Nullable String hint){
         ILokalHelper<Lahan> lokalLahan = new LokalHelper<>(context, LokalHelper.DB_WHICH_LAHAN);
@@ -68,7 +65,17 @@ public class MyConstants { // should be put in local db that synchronized with s
         return resultMap;
     }
 
-    public static List<String> getNamaPosisiList(@Nonnull Context context, @Nullable String hint){
+    public static Map<String, Integer> getNamaPosisiIndeks(@Nonnull Context context){
+        Map<Integer, Posisi> mapPosisi = getAllPosisi(context);
+        Map<String, Integer> mapResult = new HashMap<>();
+        for (Integer i: mapPosisi.keySet()){
+            Posisi posisi = mapPosisi.get(i);
+            mapResult.put(posisi.getNamaPosisi(), i);
+        }
+        return mapResult;
+    }
+
+    public static List<String> getNamaPosisiList(@Nonnull Context context, @Nullable String hint, int lessOrEqual){
         ILokalHelper<Posisi> lokalPosisi = new LokalHelper<>(context, LokalHelper.DB_WHICH_POSISI);
         lokalPosisi.open();
         List<String> listNamaPosisi = new ArrayList<>();
@@ -77,11 +84,38 @@ public class MyConstants { // should be put in local db that synchronized with s
         }
         if (!lokalPosisi.isEmpty()){
             Map<String, Posisi> posMap = lokalPosisi.getItems(Posisi.class);
+            int i = 0;
             for (Posisi posisi: posMap.values()){
+                if (i > lessOrEqual){
+                    break;
+                }
                 listNamaPosisi.add(posisi.getNamaPosisi());
+                i++;
             }
         }
         lokalPosisi.close();
         return listNamaPosisi;
     }
+
+//    public static Map<Integer, Posisi> getAllPosisi(@Nonnull Context context, int lessOrEqual){
+//        ILokalHelper<Posisi> lokalPosisi = new LokalHelper<>(context, LokalHelper.DB_WHICH_POSISI);
+//        lokalPosisi.open();
+//        Map<Integer, Posisi> resultMap = new HashMap<>();
+//        if (!lokalPosisi.isEmpty()){
+//            Map<String, Posisi> posMap = lokalPosisi.getItems(Posisi.class);
+//            for (String key: posMap.keySet()){
+//                Posisi pos = posMap.get(key);
+//                try {
+//                    Integer intKey = Integer.parseInt(key);
+//                    if (intKey <= lessOrEqual) {
+//                        resultMap.put(intKey, pos);
+//                    }
+//                } catch (NumberFormatException err){
+//                    Log.e(TAG, "getAllPosisi: "+err.getMessage());
+//                }
+//            }
+//        }
+//        lokalPosisi.close();
+//        return resultMap;
+//    }
 }

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/tv_dialogDOMoreInfo_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/very_high_margin"
+        android:layout_marginEnd="@dimen/very_high_margin"
+        android:layout_marginTop="@dimen/high_margin"
+        android:layout_marginBottom="@dimen/high_margin"
+        android:textSize="18sp"
+        android:drawablePadding="@dimen/high_margin"
+        android:textColor="@color/darkGray"
+        android:text="@string/do_more_details"
+        app:drawableStartCompat="@drawable/ic_task_more_detail_edit" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_thin"
+        android:background="@color/lightGray"
+        android:layout_below="@+id/tv_dialogDOMoreInfo_title"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/high_margin"
+        android:paddingEnd="@dimen/high_margin"
+        android:layout_above="@+id/cl_dialogDOMoreInfo_bottom"
+        android:layout_below="@+id/tv_dialogDOMoreInfo_title">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_dialogDOMoreInfo_refaksiLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/normal_margin"
+                android:text="@string/refaksi"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/et_dialogDOMoreInfo_refaksi"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/et_dialogDOMoreInfo_refaksi" />
+
+            <EditText
+                android:id="@+id/et_dialogDOMoreInfo_refaksi"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
+                android:hint="@string/in_percent"
+                android:autofillHints="@string/default_refaksi"
+                android:inputType="number"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/et_dialogDOMoreInfo_hargaSawit"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_dialogDOMoreInfo_hargaSawitLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/normal_margin"
+                android:text="@string/harga_sawit"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/et_dialogDOMoreInfo_hargaSawit"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/et_dialogDOMoreInfo_hargaSawit" />
+
+            <EditText
+                android:id="@+id/et_dialogDOMoreInfo_hargaSawit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
+                android:inputType="number"
+                android:hint="@string/per_kg"
+                android:autofillHints="@string/default_harga_sawit"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/et_dialogDOMoreInfo_upah"
+                app:layout_constraintTop_toBottomOf="@+id/et_dialogDOMoreInfo_refaksi" />
+
+            <TextView
+                android:id="@+id/tv_dialogDOMoreInfo_upahLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/normal_margin"
+                android:text="@string/upah_karyawan"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/et_dialogDOMoreInfo_upah"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/et_dialogDOMoreInfo_upah" />
+
+            <EditText
+                android:id="@+id/et_dialogDOMoreInfo_upah"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/very_high_margin"
+                android:inputType="number"
+                android:autofillHints="@string/default_upah_karyawan"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_dialogDOMoreInfo_upahLabel"
+                app:layout_constraintTop_toBottomOf="@+id/et_dialogDOMoreInfo_hargaSawit" />
+
+            <TextView
+                android:id="@+id/tv_dialogDOMoreInfo_upahSopirLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/normal_margin"
+                android:text="@string/upah_sopir"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/et_dialogDOMoreInfo_upahSopir"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/et_dialogDOMoreInfo_upahSopir" />
+
+            <EditText
+                android:id="@+id/et_dialogDOMoreInfo_upahSopir"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/very_high_margin"
+                android:inputType="number"
+                android:autofillHints="@string/default_upah_sopir"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_dialogDOMoreInfo_upahLabel"
+                app:layout_constraintTop_toBottomOf="@+id/et_dialogDOMoreInfo_upah"/>
+
+            <TextView
+                android:id="@+id/tv_dialogDOMoreInfo_upahBrondolLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/normal_margin"
+                android:text="@string/upah_brondol"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/et_dialogDOMoreInfo_upahBrondol"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/et_dialogDOMoreInfo_upahBrondol" />
+
+            <EditText
+                android:id="@+id/et_dialogDOMoreInfo_upahBrondol"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
+                android:layout_marginStart="@dimen/very_high_margin"
+                android:inputType="number"
+                android:autofillHints="@string/default_upah_brondol"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_dialogDOMoreInfo_upahLabel"
+                app:layout_constraintTop_toBottomOf="@+id/et_dialogDOMoreInfo_upahSopir"/>
+
+            <TextView
+                android:id="@+id/tv_dialogDOMoreInfo_karyawanSopir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginTop="@dimen/very_high_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
+                android:text="@string/karyawan_sopir"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_dialogDOMoreInfo_upahBrondol" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_dialogDOMoreInfo_listKaryawanSopir"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_margin"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_dialogDOMoreInfo_karyawanSopir"
+                tools:listitem="@layout/item_list_sopir" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_dialogDOMoreInfo_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <View
+            android:id="@+id/view_dialogDOMoreInfo_divider2"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/divider_thin"
+            android:background="@color/lightGray"
+            android:layout_marginBottom="@dimen/normal_margin"
+            app:layout_constraintBottom_toTopOf="@+id/btn_dialogDOMoreInfo_saveDO"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btn_dialogDOMoreInfo_saveDO"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/very_high_margin"
+            android:layout_marginEnd="@dimen/very_high_margin"
+            android:layout_marginBottom="@dimen/normal_margin"
+            android:text="@string/simpan_perubahan"
+            android:textAllCaps="false"
+            android:backgroundTint="@color/teal_700"
+            app:layout_constraintBottom_toTopOf="@id/tv_dialogDOMoreInfo_batal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_dialogDOMoreInfo_batal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/normal_margin"
+            android:layout_marginBottom="@dimen/very_high_margin"
+            android:text="@string/batal"
+            android:textAllCaps="false"
+            android:textColor="@color/lightGray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>

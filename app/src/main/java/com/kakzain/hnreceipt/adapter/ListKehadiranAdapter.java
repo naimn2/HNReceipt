@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.kakzain.hnreceipt.MyConstants;
+import com.kakzain.hnreceipt.db.lokal.MyConstants;
 import com.kakzain.hnreceipt.R;
 import com.kakzain.hnreceipt.model.Karyawan;
 
@@ -53,7 +53,8 @@ public class ListKehadiranAdapter extends RecyclerView.Adapter<ListKehadiranAdap
         ArrayAdapter<String> spinHadirAdapter = new ArrayAdapter<>(
                 context,
                 android.R.layout.simple_spinner_dropdown_item,
-                MyConstants.getNamaPosisiList(context, "Absen")
+                // ARRAY HANYA PEMANEN DAN PENGANGKUT
+                MyConstants.getNamaPosisiList(context, "Absen", 1)
         );
         holder.spinHadir.setAdapter(spinHadirAdapter);
         holder.spinHadir.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

@@ -1,6 +1,5 @@
 package com.kakzain.hnreceipt.activity
 
-import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,18 +10,18 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.kakzain.hnreceipt.MyConstants
+import com.kakzain.hnreceipt.db.lokal.MyConstants
 import com.kakzain.hnreceipt.R
 import com.kakzain.hnreceipt.adapter.ListKehadiranAdapter
 import com.kakzain.hnreceipt.adapter.ListPanenLahanAdapter
+import com.kakzain.hnreceipt.adapter.ListSopirAdapter
 import com.kakzain.hnreceipt.db.IDatabaseHelper
 import com.kakzain.hnreceipt.db.firebase.FirestoreHelper
+import com.kakzain.hnreceipt.helper.CurrencyFormatter
 import com.kakzain.hnreceipt.helper.DateFormatter
-import com.kakzain.hnreceipt.model.DeliveryOrder
-import com.kakzain.hnreceipt.model.Karyawan
-import com.kakzain.hnreceipt.model.Kehadiran
-import com.kakzain.hnreceipt.model.PanenSawitLahan
+import com.kakzain.hnreceipt.model.*
 import kotlinx.android.synthetic.main.activity_create_d_o.*
+import kotlinx.android.synthetic.main.dialog_form_input_d_o_more_info_detail.*
 import java.lang.Exception
 import java.lang.NumberFormatException
 import java.util.*
@@ -51,15 +50,17 @@ class CreateDOActivity : AppCompatActivity() {
         setSupportActionBar(toolbar_activityCreateDO)
         title = getString(R.string.create_do)
 
-        dbKaryawanHelper = FirestoreHelper()
-        dbDOHelper = FirestoreHelper()
-        dbPanenSawitLahan = FirestoreHelper()
-        mapKehadiran = HashMap()
-
         val karyawanMap = MyConstants.getAllKaryawan(this)
         listKaryawan = ArrayList(karyawanMap.values)
         listIdKaryawan = ArrayList(karyawanMap.keys)
         idDO = intent.getStringExtra(ID_DO_EXTRA)
+
+        currentDO = DeliveryOrder()
+        dbKaryawanHelper = FirestoreHelper()
+        dbDOHelper = FirestoreHelper()
+        dbDOHelper.setReference(DeliveryOrder.DO_DB_REFERENCE+"/"+idDO)
+        dbPanenSawitLahan = FirestoreHelper()
+        mapKehadiran = HashMap()
 
         btn_activityCreateDO_tambahLahanPanen.setOnClickListener {
             showDialogTambahLahanPanen()
@@ -71,31 +72,45 @@ class CreateDOActivity : AppCompatActivity() {
         readDOdb()
     }
 
+    private fun initListenerPanenLahanAdapter() {
+        panenLahanAdapter.setOnMenuClickListenerCallback { _, position ->
+            if (currentDO.panenSawitLahan != null) {
+                showDialogRemoveItemPanenLahanConfirmation(position)
+            }
+        }
+    }
+
     private fun readDOdb(){
         // BACA DATA DO SEBELUM UPDATE VIEW
-        dbDOHelper.setReference(DeliveryOrder.DO_DB_REFERENCE+"/"+idDO).addValueEventListenerCallback(
+        showLoadingPanen(true)
+        dbDOHelper.addValueEventListenerCallback(
             object : IDatabaseHelper.ValueEventListenerCallback<DeliveryOrder> {
                 override fun onDataUpdate(value: DeliveryOrder?, id: String?) {
+                    showLoadingPanen(false)
                     if (value != null){
                         currentDO = value
 
                         // UPDATE VIEW
                         tv_activityCreateDO_beratTotal.text = String.format("%.01f KG", value.beratTotal)
                         tv_activityCreateDO_tanggal.text = DateFormatter.getDate(value.tanggal.toDate().time)
+
                         // SHOW BTN ADD LAHAN PANEN
                         btn_activityCreateDO_tambahLahanPanen.visibility = View.VISIBLE
+
                         // DISABLE EDIT / ADD LAHAN PANEN IF COMMITTED
-                        if (value.isCommitted){
+                        // ADD PANEN LAHAN MORE ITEM LISTENER WHEN _DO IS NOT COMMITTED
+                        if (currentDO.isCommitted){
                             btn_activityCreateDO_tambahLahanPanen.isEnabled = false
-                        }
-                        if (value.panenSawitLahan != null && value.panenSawitLahan.size > 0) {
-                            // UPDATE LIST PANEN LAHAN ADAPTER
-                            panenLahanAdapter.setData(value.panenSawitLahan)
-                            // HIDE NO LAHAN PANEN
-                            tv_activityCreateDO_noLahanPanen.visibility = View.INVISIBLE
                         } else {
-                            // SHOW NO LAHAN PANEN
-                            tv_activityCreateDO_noLahanPanen.visibility = View.VISIBLE
+                            btn_activityCreateDO_tambahLahanPanen.isEnabled = true
+                            initListenerPanenLahanAdapter()
+                        }
+
+                        if (currentDO.panenSawitLahan != null && currentDO.panenSawitLahan.size > 0) {
+                            panenLahanAdapter.setData(currentDO.panenSawitLahan)    // UPDATE LIST PANEN LAHAN ADAPTER
+                            tv_activityCreateDO_noLahanPanen.visibility = View.INVISIBLE    // HIDE NO LAHAN PANEN
+                        } else {
+                            tv_activityCreateDO_noLahanPanen.visibility = View.VISIBLE    // SHOW NO LAHAN PANEN
                         }
                     }
                 }
@@ -111,8 +126,7 @@ class CreateDOActivity : AppCompatActivity() {
 
         val btnSave = dialogView.findViewById<Button>(R.id.btn_dialogTambahLahanPanen_save)
         val spinLahan = dialogView.findViewById<Spinner>(R.id.spinner_dialogTambahLahanPanen_lahan)
-        val spinArrayAdapter = ArrayAdapter<String>(this,
-            android.R.layout.simple_spinner_dropdown_item,
+        val spinArrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item,
             MyConstants.getLahanArrayList(this, "Pilih Lahan"))
         spinLahan.adapter = spinArrayAdapter
         val etBeratBersih = dialogView.findViewById<EditText>(R.id.et_dialogTambahLahanPanen_beratBersih)
@@ -121,9 +135,12 @@ class CreateDOActivity : AppCompatActivity() {
         val tvTutup = dialogView.findViewById<TextView>(R.id.tv_dialogTambahLahanPanen_tutup)
 
         // SIAPKAN RECYCLER VIEW KEHADIRAN KARYAWAN
-        val linearLayoutManager = LinearLayoutManager(this)
-        adapterKehadiran =
-            ListKehadiranAdapter(this)
+        val linearLayoutManager = object: LinearLayoutManager(this){
+            override fun canScrollVertically(): Boolean {
+                return false
+            }
+        }
+        adapterKehadiran = ListKehadiranAdapter(this)
         adapterKehadiran.setData(listKaryawan)
 
         // ON POSISI SPINNER LISTENER CALLBACK
@@ -139,8 +156,8 @@ class CreateDOActivity : AppCompatActivity() {
         rvKehadiran.layoutManager = linearLayoutManager
         rvKehadiran.adapter = adapterKehadiran
 
-        // TAMPILKAN ALERT DIALOG TAMBAH LAHAN PANEN
-        val alertDialog = AlertDialog.Builder(this).setView(dialogView).show()
+        // BUILD ALERT DIALOG TAMBAH LAHAN PANEN
+        val alertDialog = AlertDialog.Builder(this).setView(dialogView).create()
 
         tvTutup.setOnClickListener { alertDialog.dismiss() }
         btnSave.setOnClickListener {
@@ -158,7 +175,7 @@ class CreateDOActivity : AppCompatActivity() {
                 val beratBersih = etBeratBersih.text.toString().toFloat()
                 val beratBrondol = etBeratBrondol.text.toString().toFloat()
                 val kehadiran = ArrayList(mapKehadiran.values)
-                saveToDb(PanenSawitLahan(lahan, kehadiran, beratBersih, beratBrondol))
+                updateLahanPanenDOInDB(PanenSawitLahan(lahan, kehadiran, beratBersih, beratBrondol))
                 alertDialog.dismiss()
             }
             catch (numberFormatException: NumberFormatException){
@@ -168,22 +185,233 @@ class CreateDOActivity : AppCompatActivity() {
                 Toast.makeText(this, "Error tidak dikenal", Toast.LENGTH_SHORT).show()
             }
         }
+        // SHOw ALERT DIALOG
+        alertDialog.show()
     }
 
-    private fun saveToDb(lahanPanen: PanenSawitLahan){
+    private fun updateLahanPanenDOInDB(lahanPanen: PanenSawitLahan){
         if (currentDO.panenSawitLahan == null) {
             currentDO.panenSawitLahan = ArrayList()
         }
         currentDO.panenSawitLahan.add(lahanPanen)
-
         // PERBARUI BERAT TOTAL DO
         currentDO.beratTotal += lahanPanen.beratBersih + lahanPanen.beratBrondol
-
         // TULIS DO TERBARU KE DB
         dbDOHelper.writeValue(currentDO)
-
         // CLEAR LIST KEHADIRAN
         mapKehadiran.clear()
+    }
+
+    private fun showDialogFormInputDOmoreInformationDetail(){
+        val mView = layoutInflater.inflate(R.layout.dialog_form_input_d_o_more_info_detail,
+                null, false)
+        val etRefaksi = mView.findViewById<EditText>(R.id.et_dialogDOMoreInfo_refaksi)
+        val etHargaSawit = mView.findViewById<EditText>(R.id.et_dialogDOMoreInfo_hargaSawit)
+        val etUpahKaryawan = mView.findViewById<EditText>(R.id.et_dialogDOMoreInfo_upah)
+        val etUpahSopir = mView.findViewById<EditText>(R.id.et_dialogDOMoreInfo_upahSopir)
+        val etUpahBrondol = mView.findViewById<EditText>(R.id.et_dialogDOMoreInfo_upahBrondol)
+        val rvListSopir = mView.findViewById<RecyclerView>(R.id.rv_dialogDOMoreInfo_listKaryawanSopir)
+
+//        etRefaksi.addTextChangedListener {
+//            Log.d(TAG, "showDialogFormInputDOmoreInformationDetail: ${it?.toString()!!.toFloat()/100}")
+//        }
+
+        // SETUP RECYCLER VIEW LIST SOPIR
+        rvListSopir.layoutManager = LinearLayoutManager(this)
+        val listSopirAdapter = ListSopirAdapter(this)
+        rvListSopir.adapter = listSopirAdapter
+        listSopirAdapter.setData(listKaryawan)
+        val listSopir = ArrayList<Kehadiran>()
+        // SET ON SOPIR CHECK CHANGE LISTENER
+        listSopirAdapter.setOnSopirListenerCallback { b, i ->
+            if (b){
+                listSopir.add(Kehadiran(listIdKaryawan[i],
+                        MyConstants.getNamaPosisiIndeks(this)["Sopir"]!!))
+            }
+        }
+        // BUILD ALERT DIALOG DO MORE DETAILS
+        val alertDialog = AlertDialog.Builder(this)
+                .setView(mView).create()
+
+        // ADD ON CETAK DO BUTTON CLICK LISTENER
+        mView.findViewById<Button>(R.id.btn_dialogDOMoreInfo_saveDO).setOnClickListener {
+            try {
+                val refaksi = etRefaksi.text.toString().toFloat()/100
+                val hargaSawit = etHargaSawit.text.toString().toInt()
+                // PERHATIKAN URUTAN UPAH
+                val upahPemanen = Upah(0, etUpahKaryawan.text.toString().toFloat())
+                val upahPengangkut =  Upah(1, etUpahKaryawan.text.toString().toFloat())
+                val upahSopir = Upah(2, etUpahSopir.text.toString().toFloat().div(100))
+                val upahBrondol = Upah(3, etUpahBrondol.text.toString().toFloat())
+                val upah = ArrayList<Upah>()
+                upah.add(upahPemanen)
+                upah.add(upahPengangkut)
+                upah.add(upahSopir)
+                upah.add(upahBrondol)
+                updateCurrentDOMoreDetail(
+                        refaksi,
+                        hargaSawit,
+                        upah,
+                        listSopir
+                )
+                alertDialog.dismiss()
+            } catch (err: NumberFormatException){
+                Log.e(TAG, "showDialogFormInputDOmoreInformationDetail: ${err.message}", err)
+                Toast.makeText(this, "Data Tidak Valid", Toast.LENGTH_SHORT).show()
+            }
+        }
+        // ADD ON BTN BATAL CLICK LISTENER
+        mView.findViewById<TextView>(R.id.tv_dialogDOMoreInfo_batal).setOnClickListener {
+            alertDialog.dismiss()
+        }
+        // SHOW ALERT DIALOG DO MORE DETAILS
+        alertDialog.show()
+    }
+
+    private fun updateCurrentDOMoreDetail(refaksi: Float, hargaSawit: Int,
+                                                upah: List<Upah>, sopir: List<Kehadiran>) {
+        // UPDATE DO IN DB
+        currentDO.refaksi = refaksi
+        currentDO.hargaSawit = hargaSawit
+        currentDO.upah = upah
+        currentDO.sopir = sopir
+        dbDOHelper.writeValue(currentDO)
+    }
+
+    private fun showDialogCommitDOconfirmation() {
+        AlertDialog.Builder(this)
+                .setTitle(getString(R.string.cetak_do))
+                .setMessage(getString(R.string.cetak_do_message_confirmation))
+                .setIcon(R.drawable.ic_task_complete)
+                .setPositiveButton(R.string.ya_caps) { _, _ ->
+                    // UPDATE DO STATUS TO 'COMMITTED'
+                    if (!currentDO.isComplete){
+                        showDialogUnCompleteDO()
+                        return@setPositiveButton
+                    }
+                    currentDO.isCommitted = true
+                    dbDOHelper.writeValue(currentDO)
+                    setEditableViewDO(false)
+                    Toast.makeText(applicationContext, "Delivery Order Dicetak", Toast.LENGTH_SHORT).show()
+
+                    // CREATE SUMMARY
+                    summaryDO(currentDO)
+                }
+                .setNegativeButton(R.string.batal_caps) { _, _ ->
+                    // nothing
+                }
+                .show()
+    }
+
+    private fun summaryDO(mDO: DeliveryOrder){
+        val listPenggajian = ArrayList<Penggajian>()
+        val listPanenLahan = mDO.panenSawitLahan ?: return
+        val mapKaryawan = MyConstants.getAllKaryawan(this)
+
+        // HITUNG HARGA OMZET
+        val beratBersihDO = mDO.beratTotal - mDO.beratTotal*mDO.refaksi
+        val hargaOmzet = beratBersihDO*mDO.hargaSawit
+
+        // <======================> PERHITUNGAN GAJI SETIAP KARYAWAN <======================>
+        var gajiTotalKaryawan = 0.0
+        // TELUSURI SETIAP KARYAWAN
+        for (keyKaryawan in mapKaryawan.keys){
+            // INIT GAJI AWAL
+            var gaji = 0.0
+
+            // TELUSURI SETIAP LAHAN PANEN
+            for (currentPanenLahan in listPanenLahan){
+
+                val beratBersihPanen = currentPanenLahan.beratBersih
+                val jumlahHadir = currentPanenLahan.kehadiran.size
+
+                // TELUSURI SETIAP KEHADIRAN
+                kehadiran@
+                for (currentKehadiran in currentPanenLahan.kehadiran){
+
+                    // CEK KEHADIRAN CURRENT KARYAWAN LALU UPDATE GAJI
+                    // KHUSUS PEMANEN/PENGANGKUT
+                    val mapNamaPosisiIndeks = MyConstants.getNamaPosisiIndeks(this)
+                    if (keyKaryawan == currentKehadiran.idKaryawan &&
+                            (currentKehadiran.posisi == mapNamaPosisiIndeks["Pemanen"])){
+                        val upahPMNPK = mDO.upah[currentKehadiran.posisi].upah
+                        gaji += beratBersihPanen*upahPMNPK/jumlahHadir
+                        break@kehadiran
+                    }
+                }
+            }
+            // CEK SOPIR LALU UPDATE GAJI
+            // KHUSUS SOPIR
+            sopir@
+            for (currentSopir in mDO.sopir){
+                if (currentSopir.idKaryawan == keyKaryawan){
+                    val upahSopir = mDO.upah[currentSopir.posisi].upah
+                    gaji += upahSopir*hargaOmzet
+                    break@sopir
+                }
+            }
+            val penggajian = Penggajian(keyKaryawan, gaji)
+            listPenggajian.add(penggajian)
+            gajiTotalKaryawan += gaji
+            Log.d(TAG,"gaji(${mapKaryawan[keyKaryawan]?.nama}) = ${CurrencyFormatter.format(gaji)}")
+        }
+        Log.d(TAG, "totalGaji: $gajiTotalKaryawan")
+
+        val hargaBersih = hargaOmzet - gajiTotalKaryawan
+        val summary = Summary(listPenggajian, hargaBersih.toFloat())
+
+        // TULIS SUMMARY KE DB
+        FirestoreHelper<Summary>().setReference(Summary.SUMMARY_REFERENCE+"/"+idDO).writeValue(summary)
+    }
+
+    private fun showDialogRemoveItemPanenLahanConfirmation(position: Int) {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.hapus_panen_lahan)
+            .setMessage(R.string.hapus_item_message_confirmation)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setPositiveButton(R.string.ya_caps) { _, _ ->
+                removeItemPanenLahan(position)
+            }
+            .setNegativeButton(R.string.batal_caps){ _, _ ->
+                // do nothing
+            }
+            .show()
+    }
+
+    private fun removeItemPanenLahan(position: Int) {
+        currentDO.panenSawitLahan.removeAt(position)
+        panenLahanAdapter.setData(currentDO.panenSawitLahan)
+        dbDOHelper.writeValue(currentDO)
+    }
+
+    private fun showDialogUnCompleteDO() {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.uncomplete_do)
+            .setMessage(R.string.uncomplete_do_alert_message)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setPositiveButton(R.string.tutup) { _, _ ->
+                // do nothing
+            }
+            .show()
+    }
+
+    private fun setEditableViewDO(b: Boolean) {
+        btn_activityCreateDO_tambahLahanPanen.isEnabled = b
+        if (!b) {
+            panenLahanAdapter.setOnMenuClickListenerCallback(null)
+        } else {
+            initListenerPanenLahanAdapter()
+        }
+    }
+
+    private fun showLoadingPanen(b: Boolean){
+        if (b){
+            pb_activityCreateDO_loadingPanenLahan.visibility = View.VISIBLE
+            rv_activityCreateDO_listLahanPanen.visibility = View.INVISIBLE
+        } else {
+            pb_activityCreateDO_loadingPanenLahan.visibility = View.GONE
+            rv_activityCreateDO_listLahanPanen.visibility = View.VISIBLE
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -192,30 +420,23 @@ class CreateDOActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.item_menuToolbarCreateDO_cetakDO){
-            showDialogPublishDOconfirmation()
+        if (item.itemId == R.id.item_menuToolbarCreateDO_moreDetailDO){
+            if (!currentDO.isCommitted) {
+                showDialogFormInputDOmoreInformationDetail()
+            } else {
+                Toast.makeText(
+                    this,
+                    "Tidak dapat mengubah rincian DO yang sudah dicetak",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        } else if (item.itemId == R.id.item_menuToolbarCreateDO_commitDO){
+            if (!currentDO.isCommitted){
+                showDialogCommitDOconfirmation()
+            } else {
+                TODO("UPDATE UI TO SUMMARY DIRECTLY")
+            }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun showDialogPublishDOconfirmation() {
-        AlertDialog.Builder(this)
-            .setTitle(getString(R.string.cetak_do))
-            .setMessage(getString(R.string.cetak_do_message_confirmation))
-            .setIcon(R.drawable.ic_baseline_event_note_24)
-            .setPositiveButton(R.string.ya, object : DialogInterface.OnClickListener {
-                override fun onClick(p0: DialogInterface?, p1: Int) {
-                    Toast.makeText(applicationContext, "DO Dicetak", Toast.LENGTH_SHORT).show()
-                    currentDO.isCommitted = true
-                    dbDOHelper.writeValue(currentDO)
-                    TODO("Update UI + push ke db cetakan DO / gaji karyawan")
-                }
-            })
-            .setNegativeButton(R.string.batal, object : DialogInterface.OnClickListener {
-                override fun onClick(p0: DialogInterface?, p1: Int) {
-                    // Nothing
-                }
-            })
-            .show()
     }
 }
