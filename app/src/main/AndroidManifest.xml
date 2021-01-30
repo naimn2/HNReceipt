@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HNReceipt">
-        <activity android:name=".activity.DaftarDOActivity"></activity>
+        <activity android:name=".activity.SummaryActivity"></activity>
+        <activity android:name=".activity.DaftarDOActivity" />
         <activity
             android:name=".activity.CreateDOActivity"
             android:label="@string/buat_do" />

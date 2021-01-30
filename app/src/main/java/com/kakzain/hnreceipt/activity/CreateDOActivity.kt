@@ -391,7 +391,7 @@ class CreateDOActivity : AppCompatActivity() {
         val summary = Summary(listPenggajian, hargaBersih.toFloat())
 
         // TULIS SUMMARY KE DB
-        FirestoreHelper<Summary>().setReference(Summary.SUMMARY_REFERENCE+"/"+idDO).writeValue(summary)
+        FirestoreHelper<Summary>().setReference(Summary.SUMMARY_DB_REFERENCE+"/"+idDO).writeValue(summary)
     }
 
     private fun showDialogRemoveItemPanenLahanConfirmation(position: Int) {

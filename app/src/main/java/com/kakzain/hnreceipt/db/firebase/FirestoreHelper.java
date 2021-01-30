@@ -48,7 +48,6 @@ public class FirestoreHelper<E> implements IDatabaseHelper<E> {
 //    }
     public FirestoreHelper(){
         keys = new ArrayList<>();
-
     }
 
     @Override

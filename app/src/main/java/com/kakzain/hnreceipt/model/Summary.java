@@ -3,7 +3,7 @@ package com.kakzain.hnreceipt.model;
 import java.util.List;
 
 public class Summary {
-    public static final String SUMMARY_REFERENCE = "summary";
+    public static final String SUMMARY_DB_REFERENCE = "summary";
     private List<Penggajian> penggajian;
     private float hargaBersih;
 
