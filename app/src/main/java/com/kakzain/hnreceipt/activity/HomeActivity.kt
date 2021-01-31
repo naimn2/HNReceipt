@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.kakzain.hnreceipt.R
 import com.kakzain.hnreceipt.db.firebase.FirestoreHelper
 import com.kakzain.hnreceipt.model.DeliveryOrder
+import kotlinx.android.synthetic.main.activity_daftar_karyawan.*
 import kotlinx.android.synthetic.main.activity_home.*
 import java.util.*
 
@@ -35,7 +36,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
     fun daftarKaryawanHandler(view: View) {
-
+        val mIntent = Intent(this, DaftarKaryawanActivity::class.java)
+        startActivity(mIntent)
     }
 
     fun daftarLahanHandler(view: View) {

@@ -68,4 +68,6 @@
     <string name="mohon_tunggu">Mohon Tunggu</string>
     <string name="unvalid_email_or_password">Password atau Email Salah</string>
     <string name="login_berhasil">Login Berhasil</string>
+    <string name="daftar_karyawan">Daftar Karyawan</string>
+    <string name="sinkronkan">Sinkronkan</string>
 </resources>
