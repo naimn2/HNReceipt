@@ -1,9 +1,256 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.SummaryActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_activitySummary"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/purple_500"
+        android:theme="@style/MyDarkToolbar"
+        android:title="@string/summary_d_o"
+        android:layout_alignParentTop="true"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar_activitySummary"
+        android:background="@color/background">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/normal_margin"
+                android:elevation="@dimen/normal_elevation"
+                android:background="@color/white"
+                android:padding="@dimen/normal_margin">
+
+                <TextView
+                    android:id="@+id/tv_activitySummary_labelGajiKaryawan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/normal_margin"
+                    android:layout_marginStart="@dimen/normal_margin"
+                    android:fontFamily="monospace"
+                    android:text="@string/gaji_karyawan"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_activitySummary_labelKaryawan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/very_high_margin"
+                    android:layout_marginStart="@dimen/normal_margin"
+                    android:fontFamily="monospace"
+                    android:text="@string/nama"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_activitySummary_labelGajiKaryawan" />
+
+                <TextView
+                    android:id="@+id/tv_activitySummary_labelGaji"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/normal_margin"
+                    android:layout_marginTop="@dimen/very_high_margin"
+                    android:fontFamily="monospace"
+                    android:text="@string/gaji"
+                    android:textAlignment="textEnd"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_activitySummary_labelKaryawan"
+                    app:layout_constraintTop_toBottomOf="@id/tv_activitySummary_labelGajiKaryawan" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_activity_summary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/high_margin"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_activitySummary_labelKaryawan"
+                    tools:listitem="@layout/item_list_gaji_karyawan" />
+
+                <View
+                    android:id="@+id/view1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/divider_thin"
+                    android:background="@color/lightGray"
+                    android:layout_margin="@dimen/normal_margin"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rv_activity_summary" />
+
+                <TextView
+                    android:id="@+id/tv_activitySummary_labeltotalGaji"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/normal_margin"
+                    android:fontFamily="monospace"
+                    android:text="@string/total"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view1" />
+
+                <TextView
+                    android:id="@+id/tv_activitySummary_nilaiTotalGaji"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/normal_margin"
+                    android:fontFamily="monospace"
+                    android:text="@string/nol_rupiah"
+                    android:textAlignment="textEnd"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tv_activitySummary_labeltotalGaji"
+                    app:layout_constraintTop_toBottomOf="@id/view1" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/normal_margin"
+                android:elevation="@dimen/normal_elevation"
+                android:background="@color/white"
+                android:padding="@dimen/normal_margin">
+
+                <TextView
+                    android:id="@+id/tv_activitySummary_labelBeratKotor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/normal_margin"
+                    android:fontFamily="monospace"
+                    android:text="@string/berat_total_kotor"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_activitySummary_nilaiBeratKotor"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/normal_margin"
+                    android:fontFamily="monospace"
+                    android:text="@string/nol_kilogram"
+                    android:textAlignment="textEnd"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tv_activitySummary_labelBeratKotor"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_activitySummary_labelRefaksi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/normal_margin"
+                    android:fontFamily="monospace"
+                    android:text="@string/refaksi"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_activitySummary_labelBeratKotor" />
+
+                <TextView
+                    android:id="@+id/tv_activitySummary_nilaiRefaksi"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/normal_margin"
+                    android:fontFamily="monospace"
+                    android:text="@string/nol_persen"
+                    android:textAlignment="textEnd"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tv_activitySummary_labelRefaksi"
+                    app:layout_constraintTop_toBottomOf="@id/tv_activitySummary_nilaiBeratKotor" />
+
+                <TextView
+                    android:id="@+id/tv_activitySummary_labelBeratBersih"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/normal_margin"
+                    android:fontFamily="monospace"
+                    android:text="@string/berat_total_bersih"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_activitySummary_labelRefaksi" />
+
+                <TextView
+                    android:id="@+id/tv_activitySummary_nilaiBeratBersih"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/normal_margin"
+                    android:fontFamily="monospace"
+                    android:text="@string/nol_kilogram"
+                    android:textAlignment="textEnd"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tv_activitySummary_labelBeratBersih"
+                    app:layout_constraintTop_toBottomOf="@id/tv_activitySummary_nilaiRefaksi" />
+
+                <View
+                    android:id="@+id/view0"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/divider_thin"
+                    android:background="@color/lightGray"
+                    android:layout_margin="@dimen/normal_margin"
+                    app:layout_constraintTop_toBottomOf="@id/tv_activitySummary_labelBeratBersih"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <TextView
+                    android:id="@+id/tv_activitySummary_labelHargaOmzet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/normal_margin"
+                    android:fontFamily="monospace"
+                    android:text="@string/harga_omzet"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/view0" />
+
+                <TextView
+                    android:id="@+id/tv_activitySummary_nilaiHargaOmzet"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/normal_margin"
+                    android:fontFamily="monospace"
+                    android:text="@string/nol_rupiah"
+                    android:textAlignment="textEnd"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tv_activitySummary_labelHargaOmzet"
+                    app:layout_constraintTop_toBottomOf="@id/view0" />
+
+                <TextView
+                    android:id="@+id/tv_activitySummary_labelHargaBersih"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/normal_margin"
+                    android:fontFamily="monospace"
+                    android:text="@string/harga_bersih"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_activitySummary_labelHargaOmzet" />
+
+                <TextView
+                    android:id="@+id/tv_activitySummary_nilaiHargaBersih"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/normal_margin"
+                    android:fontFamily="monospace"
+                    android:text="@string/nol_rupiah"
+                    android:textAlignment="textEnd"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tv_activitySummary_labelHargaBersih"
+                    app:layout_constraintTop_toBottomOf="@id/tv_activitySummary_nilaiHargaOmzet" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

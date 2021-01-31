@@ -7,6 +7,9 @@ public class Summary {
     private List<Penggajian> penggajian;
     private float hargaBersih;
 
+    public Summary() {
+    }
+
     public Summary(List<Penggajian> penggajian, float hargaBersih) {
         this.penggajian = penggajian;
         this.hargaBersih = hargaBersih;

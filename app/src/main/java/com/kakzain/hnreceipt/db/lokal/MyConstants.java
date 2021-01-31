@@ -17,8 +17,8 @@ import javax.annotation.Nullable;
 
 public class MyConstants {
     private static final String TAG = MyConstants.class.getSimpleName();
-    public static final int POSISI_PEMANEN_INDEKS = 0;
-    public static final int POSISI_PENGANGKUT_INDEKS = 1;
+    public static final int POSISI_PENGANGKUT_INDEKS = 0;
+    public static final int POSISI_PEMANEN_INDEKS = 1;
     public static final int POSISI_SOPIR_INDEKS = 2;
     public static final int POSISI_BRONDOL_INDEKS = 3;
 
@@ -79,7 +79,7 @@ public class MyConstants {
         return mapResult;
     }
 
-    public static List<String> getNamaPosisiList(@Nonnull Context context, @Nullable String hint, int lessOrEqual){
+    public static List<String> getNamaPosisiList(@Nonnull Context context, @Nullable String hint, int notEqual){
         ILokalHelper<Posisi> lokalPosisi = new LokalHelper<>(context, LokalHelper.DB_WHICH_POSISI);
         lokalPosisi.open();
         List<String> listNamaPosisi = new ArrayList<>();
@@ -90,8 +90,9 @@ public class MyConstants {
             Map<String, Posisi> posMap = lokalPosisi.getItems(Posisi.class);
             int i = 0;
             for (Posisi posisi: posMap.values()){
-                if (i > lessOrEqual){
-                    break;
+                if (i == notEqual){
+                    i++;
+                    continue;
                 }
                 listNamaPosisi.add(posisi.getNamaPosisi());
                 i++;

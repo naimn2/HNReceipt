@@ -49,4 +49,22 @@
     <string name="upah_pemanen">Pemanen</string>
     <string name="upah_pemanen_pengangkut">Upah Pemanen /\nPengangkut</string>
     <string name="upah_pengangkut">Upah Pengangkut</string>
+    <string name="harga_bersih">Harga Bersih</string>
+    <string name="nol_rupiah">Rp 0,-</string>
+    <string name="gaji_karyawan">Gaji Karyawan</string>
+    <string name="nama">Nama</string>
+    <string name="gaji">Gaji</string>
+    <string name="total">Total</string>
+    <string name="summary_d_o">Delivery Order (Summary)</string>
+    <string name="harga_omzet">Harga Omzet</string>
+    <string name="berat_total_kotor">Berat Total Kotor</string>
+    <string name="nol_kilogram">0 Kg</string>
+    <string name="nol_persen">0 %</string>
+    <string name="berat_total_bersih">Berat Total Bersih</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="mohon_tunggu">Mohon Tunggu</string>
+    <string name="unvalid_email_or_password">Password atau Email Salah</string>
+    <string name="login_berhasil">Login Berhasil</string>
 </resources>

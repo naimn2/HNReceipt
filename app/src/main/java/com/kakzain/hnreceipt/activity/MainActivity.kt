@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 import com.kakzain.hnreceipt.R
 import com.kakzain.hnreceipt.db.IDatabaseHelper
 import com.kakzain.hnreceipt.db.firebase.FirestoreHelper
@@ -126,7 +128,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateUI() {
-        val i = Intent(this, HomeActivity::class.java)
+        val i: Intent
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            i = Intent(this, HomeActivity::class.java)
+        } else {
+            i = Intent(this, LoginActivity::class.java)
+        }
         startActivity(i)
         finish()
     }

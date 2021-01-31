@@ -3,9 +3,11 @@ package com.kakzain.hnreceipt.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.widget.Toast
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.kakzain.hnreceipt.R
 import com.kakzain.hnreceipt.db.firebase.FirestoreHelper
 import com.kakzain.hnreceipt.model.DeliveryOrder
@@ -38,5 +40,25 @@ class HomeActivity : AppCompatActivity() {
 
     fun daftarLahanHandler(view: View) {
 
+    }
+
+    private var isClickBackTwice = false;
+
+    override fun onBackPressed() {
+        if (isClickBackTwice) {
+            super.onBackPressed()
+        } else {
+            Toast.makeText(this, "Press Back Twice to Close", Toast.LENGTH_SHORT).show()
+            isClickBackTwice = true
+            Handler()
+                .postDelayed(Runnable {
+                    isClickBackTwice = false
+                }, 2000)
+        }
+    }
+
+    override fun onDestroy() {
+        FirebaseAuth.getInstance().signOut()
+        super.onDestroy()
     }
 }

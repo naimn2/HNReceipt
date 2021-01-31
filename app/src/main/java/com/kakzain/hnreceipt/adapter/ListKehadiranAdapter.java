@@ -21,7 +21,7 @@ import java.util.Arrays;
 
 public class ListKehadiranAdapter extends RecyclerView.Adapter<ListKehadiranAdapter.ViewHolder> {
     private final Context context;
-    private ArrayList<Karyawan> listKaryawan;
+    private final ArrayList<Karyawan> listKaryawan;
     private OnClickListenerCallback onHadirListenerCallback;
 
     public ListKehadiranAdapter(Context context) {
@@ -54,7 +54,7 @@ public class ListKehadiranAdapter extends RecyclerView.Adapter<ListKehadiranAdap
                 context,
                 android.R.layout.simple_spinner_dropdown_item,
                 // ARRAY HANYA PEMANEN DAN PENGANGKUT
-                MyConstants.getNamaPosisiList(context, "Absen", 1)
+                MyConstants.getNamaPosisiList(context, "Absen", MyConstants.POSISI_SOPIR_INDEKS)
         );
         holder.spinHadir.setAdapter(spinHadirAdapter);
         holder.spinHadir.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

@@ -5,4 +5,5 @@
     <dimen name="very_high_margin">18dp</dimen>
     <dimen name="divider_thin">1dp</dimen>
     <dimen name="toolbar_elevation">6dp</dimen>
+    <dimen name="normal_elevation">4dp</dimen>
 </resources>

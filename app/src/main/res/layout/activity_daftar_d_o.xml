@@ -13,9 +13,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/white"
         app:title="@string/daftar_do"
-        app:titleTextColor="@color/darkGray"
-        android:theme="@style/Widget.AppCompat.Light.ActionBar"
-        android:elevation="@dimen/toolbar_elevation" />
+        android:theme="@style/MyLightToolbar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_activityDaftarDO_daftarDO"

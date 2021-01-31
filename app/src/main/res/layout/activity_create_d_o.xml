@@ -7,24 +7,17 @@
     android:background="@color/background"
     tools:context=".activity.CreateDOActivity">
 
-<!--    <com.google.android.material.appbar.AppBarLayout-->
-<!--        android:id="@+id/appbar_activityCreateDO"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content">-->
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_activityCreateDO"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/white"
-        android:elevation="@dimen/toolbar_elevation"
+        app:title="@string/create_do"
+        android:theme="@style/MyLightToolbar"
         app:menu="@menu/menu_toolbar_create_d_o"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:title="@string/create_do"/>
-
-<!--    </com.google.android.material.appbar.AppBarLayout>-->
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <RelativeLayout
         android:id="@+id/rl_activityCreateDO_layoutListLahanPanen"

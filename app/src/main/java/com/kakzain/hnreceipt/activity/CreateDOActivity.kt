@@ -1,5 +1,6 @@
 package com.kakzain.hnreceipt.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
@@ -31,6 +32,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
 class CreateDOActivity : AppCompatActivity() {
     companion object { const val ID_DO_EXTRA = "idDOExtra" }
@@ -53,6 +55,7 @@ class CreateDOActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar_activityCreateDO)
         title = getString(R.string.create_do)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val karyawanMap = MyConstants.getAllKaryawan(this)
         listKaryawan = ArrayList(karyawanMap.values)
@@ -151,6 +154,8 @@ class CreateDOActivity : AppCompatActivity() {
         adapterKehadiran.setOnHadirListenerCallback { i, position ->
             val idKaryawan = listIdKaryawan[position]
             val posisiKeys = ArrayList<Int>(MyConstants.getAllPosisi(this).keys)
+            Log.d(TAG, "showDialogTambahLahanPanen: i: $i")
+            Log.d(TAG, "showDialogTambahLahanPanen: position: $position")
             if (i == 0){
                 mapKehadiran.remove(position)
             } else {
@@ -339,10 +344,10 @@ class CreateDOActivity : AppCompatActivity() {
         val mapKaryawan = MyConstants.getAllKaryawan(this)
 
         // HITUNG HARGA OMZET
-        val beratBersihDO = mDO.beratTotal - mDO.beratTotal*mDO.refaksi
+        val beratBersihDO = mDO.beratTotal - (mDO.beratTotal*(mDO.refaksi*100).roundToLong()/100)
         val hargaOmzet = beratBersihDO*mDO.hargaSawit
 
-        // <======================> PERHITUNGAN GAJI SETIAP KARYAWAN <======================>
+        // <=========================> PERHITUNGAN GAJI SETIAP KARYAWAN <=========================>
         var gajiTotalKaryawan = 0.0
         // TELUSURI SETIAP KARYAWAN
         for (keyKaryawan in mapKaryawan.keys){
@@ -362,8 +367,7 @@ class CreateDOActivity : AppCompatActivity() {
                     // CEK KEHADIRAN CURRENT KARYAWAN LALU UPDATE GAJI
                     // KHUSUS PEMANEN/PENGANGKUT
                     val mapNamaPosisiIndeks = MyConstants.getNamaPosisiIndeks(this)
-                    if (keyKaryawan == currentKehadiran.idKaryawan &&
-                            (currentKehadiran.posisi == mapNamaPosisiIndeks["Pemanen"])){
+                    if (keyKaryawan == currentKehadiran.idKaryawan){
                         val upahPMNPK = mDO.upah[currentKehadiran.posisi].upah
                         gaji += beratBersihPanen*upahPMNPK/jumlahHadir
                         break@kehadiran
@@ -392,6 +396,7 @@ class CreateDOActivity : AppCompatActivity() {
 
         // TULIS SUMMARY KE DB
         FirestoreHelper<Summary>().setReference(Summary.SUMMARY_DB_REFERENCE+"/"+idDO).writeValue(summary)
+        updateUItoSummary()
     }
 
     private fun showDialogRemoveItemPanenLahanConfirmation(position: Int) {
@@ -418,7 +423,7 @@ class CreateDOActivity : AppCompatActivity() {
         AlertDialog.Builder(this)
             .setTitle(R.string.uncomplete_do)
             .setMessage(R.string.uncomplete_do_alert_message)
-            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setIcon(R.drawable.ic_baseline_close_red)
             .setPositiveButton(R.string.tutup) { _, _ ->
                 // do nothing
             }
@@ -525,9 +530,17 @@ class CreateDOActivity : AppCompatActivity() {
             if (!currentDO.isCommitted){
                 showDialogCommitDOconfirmation()
             } else {
-                TODO("UPDATE UI TO SUMMARY DIRECTLY")
+                updateUItoSummary()
             }
+        } else {
+            finish()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun updateUItoSummary() {
+        val mIntent = Intent(this, SummaryActivity::class.java)
+        mIntent.putExtra(SummaryActivity.ID_D_O_EXTRA, idDO)
+        startActivity(mIntent)
     }
 }
