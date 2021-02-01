@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -135,13 +134,18 @@ class CreateDOActivity : AppCompatActivity() {
 
         val btnSave = dialogView.findViewById<Button>(R.id.btn_dialogTambahLahanPanen_save)
         val spinLahan = dialogView.findViewById<Spinner>(R.id.spinner_dialogTambahLahanPanen_lahan)
-        val spinArrayAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item,
-            MyConstants.getLahanArrayList(this, "Pilih Lahan"))
-        spinLahan.adapter = spinArrayAdapter
         val etBeratBersih = dialogView.findViewById<EditText>(R.id.et_dialogTambahLahanPanen_beratBersih)
         val etBeratBrondol = dialogView.findViewById<EditText>(R.id.et_dialogTambahLahanPanen_beratBrondol)
         val rvKehadiran = dialogView.findViewById<RecyclerView>(R.id.rv_dialogTambahLahanPanen_kehadiranKaryawan)
         val tvTutup = dialogView.findViewById<TextView>(R.id.tv_dialogTambahLahanPanen_tutup)
+
+        // SETUP SPINNER LAHAN
+        val mapLahan = MyConstants.getNamaLahanAndIdMap(this, getString(R.string.pilih_lahan))
+        val namaLahanListSpin = ArrayList<String>(mapLahan.values)
+        val idLahanList = ArrayList<Int>(mapLahan.keys)
+        val spinArrayAdapter = ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_dropdown_item, namaLahanListSpin)
+        spinLahan.adapter = spinArrayAdapter
 
         // SIAPKAN RECYCLER VIEW KEHADIRAN KARYAWAN
         val linearLayoutManager = LinearLayoutManager(this)
@@ -171,21 +175,23 @@ class CreateDOActivity : AppCompatActivity() {
 
         tvTutup.setOnClickListener { alertDialog.dismiss() }
         btnSave.setOnClickListener {
-            val lahan = spinLahan.selectedItemPosition-1
+            val indeksLahan = spinLahan.selectedItemPosition
+            Log.d(TAG, "showDialogTambahLahanPanen: indeksLahan $indeksLahan")
 
             // CEK APAKAH BELUM PILIH LAHAN
-            if (lahan == -1){
+            if (indeksLahan == 0){
                 spinLahan.requestFocus()
                 Toast.makeText(this, "Pilih Lahan Sawit", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+            val idSelectedLahan = idLahanList[indeksLahan]
 
             try {
                 // SIAPKAN MODEL PANEN LAHAN SAWIT UNTUK DITULIS KE DB
                 val beratBersih = etBeratBersih.text.toString().toFloat()
                 val beratBrondol = etBeratBrondol.text.toString().toFloat()
                 val kehadiran = ArrayList(mapKehadiran.values)
-                updateLahanPanenDOInDB(PanenSawitLahan(lahan, kehadiran, beratBersih, beratBrondol))
+                updateLahanPanenDOInDB(PanenSawitLahan(idSelectedLahan, kehadiran, beratBersih, beratBrondol))
                 alertDialog.dismiss()
             }
             catch (numberFormatException: NumberFormatException){

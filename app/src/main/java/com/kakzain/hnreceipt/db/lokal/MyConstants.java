@@ -22,22 +22,26 @@ public class MyConstants {
     public static final int POSISI_PEMANEN_INDEKS = 1;
     public static final int POSISI_SOPIR_INDEKS = 2;
     public static final int POSISI_BRONDOL_INDEKS = 3;
+    public static final int MAP_KEY_HINT = -1;
 
-    public static List<String> getLahanArrayList(@Nonnull Context context, @Nullable String hint){
+    public static Map<Integer, String> getNamaLahanAndIdMap(@Nonnull Context context, @Nullable String hint){
         ILokalHelper<Lahan> lokalLahan = new LokalHelper<>(context, LokalHelper.DB_WHICH_LAHAN);
         lokalLahan.open();
-        List<String> namaLahanArray = new ArrayList<>();
+        Map<Integer, String> mapResult = new LinkedHashMap<>();
         if (hint != null) {
-            namaLahanArray.add(hint);
+            mapResult.put(MAP_KEY_HINT, hint);
         }
         if (!lokalLahan.isEmpty()){
             Map<String, Lahan> mapLahan = lokalLahan.getItems(Lahan.class);
-            for (Lahan lahanObject: mapLahan.values()){
-                namaLahanArray.add(lahanObject.getNamaLahan());
+            for (String key: mapLahan.keySet()){
+                Lahan lahanObject = mapLahan.get(key);
+                if (lahanObject != null) {
+                    mapResult.put(Integer.valueOf(key), lahanObject.getNamaLahan());
+                }
             }
         }
         lokalLahan.close();
-        return namaLahanArray;
+        return mapResult;
     }
 
     public static Map<String, Karyawan> getAllKaryawan(@Nonnull Context context){

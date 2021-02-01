@@ -56,7 +56,7 @@ public class ListKehadiranAdapter extends RecyclerView.Adapter<ListKehadiranAdap
         ArrayAdapter<String> spinHadirAdapter = new ArrayAdapter<>(
                 context,
                 android.R.layout.simple_spinner_dropdown_item,
-                // ARRAY HANYA PEMANEN DAN PENGANGKUT
+                // ARRAY SELAIN SOPIR
                 MyConstants.getNamaPosisiList(context, "Absen", MyConstants.POSISI_SOPIR_INDEKS)
         );
         holder.spinHadir.setAdapter(spinHadirAdapter);

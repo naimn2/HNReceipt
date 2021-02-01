@@ -36,8 +36,9 @@ class DaftarKaryawanActivity : AppCompatActivity() {
         mapKaryawan = MyConstants.getAllKaryawan(this)
         lokalKaryawan = LokalHelper<Karyawan>(this, LokalHelper.DB_WHICH_KARYAWAN)
         dbKaryawanHelper = FirestoreHelper<Karyawan>()
-            .setReference(Karyawan.KARYAWAN_DB_REFERENCE)
-            .orderBy(FirestoreHelper.TIMESTAMP_COLUMN, FirestoreHelper.ASCENDING_DIRECTION)
+                .setReference(Karyawan.KARYAWAN_DB_REFERENCE)
+                .orderBy(FirestoreHelper.TIMESTAMP_COLUMN, FirestoreHelper.ASCENDING_DIRECTION)
+                .addConditional(IDatabaseHelper.IS_DELETED_COLUMN, false)
 
         setSupportActionBar(toolbar_activityDaftarKaryawan)
         title = getString(R.string.daftar_karyawan)
@@ -74,7 +75,7 @@ class DaftarKaryawanActivity : AppCompatActivity() {
 
                             override fun onListValueEventListenerCancelled(errorMessage: String?) {
                                 showLoading(false)
-                                Log.e(TAG, "onListValueEventListenerCancelled: $errorMessage")
+                                Log.e(TAG, "onListKaryawanEventListenerCancelled: $errorMessage")
                             }
                         }, Karyawan::class.java)
     }
@@ -91,13 +92,11 @@ class DaftarKaryawanActivity : AppCompatActivity() {
 
     private fun updateDataRecyclerViewAdapter(){
         mapKaryawan = MyConstants.getAllKaryawan(this)
-        for (s in mapKaryawan.keys){
-            val k = mapKaryawan[s]
-            Log.d(TAG, "updateDataRecyclerViewAdapter: ${k?.nama}")
-        }
-        listKaryawanAdapter.setData(
-            ArrayList<Karyawan>(mapKaryawan.values)
-        )
+//        for (s in mapKaryawan.keys){
+//            val k = mapKaryawan[s]
+//            Log.d(TAG, "updateDataRecyclerViewAdapter: ${k?.nama}")
+//        }
+        listKaryawanAdapter.setData(ArrayList<Karyawan>(mapKaryawan.values))
         Log.d(TAG, "updateDataRecyclerViewAdapter: Local size: ${mapKaryawan.size}")
     }
 
@@ -143,11 +142,17 @@ class DaftarKaryawanActivity : AppCompatActivity() {
     }
 
     private fun hapusKaryawan(id: String) {
-        dbKaryawanHelper.refChild(id).delete()
-        lokalKaryawan.open()
-        lokalKaryawan.delete(id)
-        lokalKaryawan.close()
-        sinkronDataKaryawan()
+        val deletedKaryawan = mapKaryawan[id]
+        if (deletedKaryawan != null) {
+            deletedKaryawan.isDeleted = true
+            dbKaryawanHelper.refChild(id).writeValue(deletedKaryawan)
+            lokalKaryawan.open()
+            if (lokalKaryawan.isExist(id)) {
+                lokalKaryawan.delete(id)
+            }
+            lokalKaryawan.close()
+            updateDataRecyclerViewAdapter()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

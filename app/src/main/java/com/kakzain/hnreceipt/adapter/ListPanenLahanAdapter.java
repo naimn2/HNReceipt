@@ -1,10 +1,8 @@
 package com.kakzain.hnreceipt.adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,13 +51,11 @@ public class ListPanenLahanAdapter extends RecyclerView.Adapter<ListPanenLahanAd
     public void onBindViewHolder(@NonNull ListPanenLahanAdapter.ViewHolder holder, int position) {
         PanenSawitLahan panenLahan = listPanenSawitLahan.get(position);
         int jumlahHadir = panenLahan.getKehadiran().size();
-        int iLahan = panenLahan.getIdLahan();
+        int idLahan = panenLahan.getIdLahan();
 
-        try {
-            holder.tvLahan.setText(MyConstants.getLahanArrayList(context, null).get(iLahan));
-        } catch (ArrayIndexOutOfBoundsException aie){
-            holder.tvLahan.setText(context.getString(R.string.lahan_ini_tidak_lagi_tersedia));
-        }
+        String namaLahan = MyConstants.getNamaLahanAndIdMap(context, null).get(idLahan);
+        holder.tvLahan.setText(TextUtils.isEmpty(namaLahan)?
+                context.getString(R.string.lahan_ini_tidak_lagi_tersedia): namaLahan);
         holder.tvJumlahHadir.setText(String.format("%d Hadir", jumlahHadir));
         holder.tvBersih.setText(String.valueOf(panenLahan.getBeratBersih())+" Kg");
         holder.tvBrondol.setText(String.valueOf(panenLahan.getBeratBrondol())+" Kg");

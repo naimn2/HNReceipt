@@ -53,26 +53,25 @@ public class ListLahanAdapter extends RecyclerView.Adapter<ListLahanAdapter.View
     public void onBindViewHolder(@NonNull ListLahanAdapter.ViewHolder holder, int position) {
         String text = (position+1)+". "+listLahan.get(position).getNamaLahan();
         holder.tvName.setText(text);
-        holder.ivMore.setVisibility(View.INVISIBLE);
-//        PopupMenu popupMenu = new PopupMenu(context, holder.ivMore);
-//        popupMenu.getMenuInflater().inflate(R.menu.menu_item_list_lahan, popupMenu.getMenu());
-//        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem menuItem) {
-//                if (onMenuItemClickListenerCallback != null){
-//                    onMenuItemClickListenerCallback.onRemoveClick(menuItem, position);
-//                } else {
-//                    Log.e(TAG, "onMenuItemClick: belum set on menu item click callback");
-//                }
-//                return true;
-//            }
-//        });
-//        holder.ivMore.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                popupMenu.show();
-//            }
-//        });
+        PopupMenu popupMenu = new PopupMenu(context, holder.ivMore);
+        popupMenu.getMenuInflater().inflate(R.menu.menu_item_list_lahan, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                if (onMenuItemClickListenerCallback != null){
+                    onMenuItemClickListenerCallback.onRemoveClick(menuItem, position);
+                } else {
+                    Log.e(TAG, "onMenuItemClick: belum set on menu item click callback");
+                }
+                return true;
+            }
+        });
+        holder.ivMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupMenu.show();
+            }
+        });
     }
 
     @Override

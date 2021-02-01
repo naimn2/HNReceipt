@@ -2,11 +2,16 @@ package com.kakzain.hnreceipt.db;
 
 import androidx.annotation.NonNull;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 
 import javax.annotation.Nonnull;
 
 public interface IDatabaseHelper<E> {
+    @Nullable
+    String IS_DELETED_COLUMN = "deleted";
+
     IDatabaseHelper<E> setReference(String ref);
     IDatabaseHelper<E> refChild(String child);
 //    public IDatabaseHelper<E> setListValuesEventListenerCallback(ListValuesEventListenerCallback<E> listValuesEventListenerCallback);

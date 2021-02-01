@@ -47,7 +47,7 @@ public class ListGajiKaryawanAdapter extends RecyclerView.Adapter<ListGajiKaryaw
     public void onBindViewHolder(@NonNull ListGajiKaryawanAdapter.ViewHolder holder, int position) {
         Penggajian penggajian = listPenggajian.get(position);
         Karyawan karyawan = MyConstants.getAllKaryawan(context).get(penggajian.getIdKaryawan());
-        holder.tvNama.setText(karyawan.getNama());
+        holder.tvNama.setText(karyawan==null?null:karyawan.getNama());
         holder.tvGaji.setText(
                 UnitValidator.validateUnitCurrency((int) penggajian.getGaji().doubleValue()));
     }

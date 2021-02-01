@@ -38,6 +38,7 @@ class DaftarLahanActivity : AppCompatActivity() {
         dbLahanHelper = FirestoreHelper<Lahan>()
                 .setReference(Lahan.LAHAN_DB_REFERENCE)
                 .orderBy(FirestoreHelper.TIMESTAMP_COLUMN, FirestoreHelper.ASCENDING_DIRECTION)
+                .addConditional(IDatabaseHelper.IS_DELETED_COLUMN, false)
 
         setSupportActionBar(toolbar_activityDaftarLahan)
         title = getString(R.string.daftar_lahan)
@@ -93,13 +94,11 @@ class DaftarLahanActivity : AppCompatActivity() {
 
     private fun updateDataRecyclerViewAdapter(){
         mapLahan = MyConstants.getAllLahan(this)
-        for (s in mapLahan.keys){
-            val k = mapLahan[s]
-            Log.d(TAG, "updateDataRecyclerViewAdapter: ${k?.namaLahan}")
-        }
-        listLahanAdapter.setData(
-                ArrayList<Lahan>(mapLahan.values)
-        )
+//        for (s in mapLahan.keys){
+//            val k = mapLahan[s]
+//            Log.d(TAG, "updateDataRecyclerViewAdapter: ${k?.namaLahan}")
+//        }
+        listLahanAdapter.setData(ArrayList<Lahan>(mapLahan.values))
         Log.d(TAG, "updateDataRecyclerViewAdapter: Local size: ${mapLahan.size}")
     }
 
@@ -170,25 +169,31 @@ class DaftarLahanActivity : AppCompatActivity() {
     }
 
     private fun hapusLahan(id: String) {
-        dbLahanHelper.refChild(id).delete()
-        lokalLahan.open()
-        lokalLahan.delete(id)
-        lokalLahan.close()
-        sinkronDataLahan()
+        val deletedLahan = mapLahan[id]
+        if (deletedLahan != null) {
+            deletedLahan.isDeleted = true
+            dbLahanHelper.refChild(id).writeValue(deletedLahan)
+            lokalLahan.open()
+            if (lokalLahan.isExist(id)) {
+                lokalLahan.delete(id)
+            }
+            lokalLahan.close()
+            updateDataRecyclerViewAdapter()
+        }
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        menuInflater.inflate(R.menu.menu_toolbar_daftar_lahan, menu)
-//        return super.onCreateOptionsMenu(menu)
-//    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_toolbar_daftar_lahan, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home){
             finish()
         }
-//        else if (item.itemId == R.id.item_menuToolbarDaftarLahan_tambahLahan){
-//            tambahLahan()
-//        }
+        else if (item.itemId == R.id.item_menuToolbarDaftarLahan_tambahLahan){
+            tambahLahan()
+        }
 
         return super.onOptionsItemSelected(item)
     }

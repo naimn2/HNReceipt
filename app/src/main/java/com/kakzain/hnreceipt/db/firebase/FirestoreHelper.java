@@ -42,15 +42,7 @@ public class FirestoreHelper<E> implements IDatabaseHelper<E> {
     private ValueEventListenerCallback<E> valueEventListenerCallback;
     private ChildEventListenerCallback childEventListenerCallback;
     private ArrayList<String> keys;
-//    private HashMap<String, Object> conditions;
-//    private HashMap<String, Object> exceptConditions;
-//    private HashMap<String, String> filter;
 
-//    public FirestoreHelper(){
-//        conditions = new HashMap<>();
-//        exceptConditions = new HashMap<>();
-//        filter = new HashMap<>();
-//    }
     public FirestoreHelper(){
         keys = new ArrayList<>();
     }
