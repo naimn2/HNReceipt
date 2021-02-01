@@ -2,6 +2,7 @@ package com.kakzain.hnreceipt.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,7 +55,11 @@ public class ListPanenLahanAdapter extends RecyclerView.Adapter<ListPanenLahanAd
         int jumlahHadir = panenLahan.getKehadiran().size();
         int iLahan = panenLahan.getIdLahan();
 
-        holder.tvLahan.setText(MyConstants.getLahanArrayList(context, null).get(iLahan));
+        try {
+            holder.tvLahan.setText(MyConstants.getLahanArrayList(context, null).get(iLahan));
+        } catch (ArrayIndexOutOfBoundsException aie){
+            holder.tvLahan.setText(context.getString(R.string.lahan_ini_tidak_lagi_tersedia));
+        }
         holder.tvJumlahHadir.setText(String.format("%d Hadir", jumlahHadir));
         holder.tvBersih.setText(String.valueOf(panenLahan.getBeratBersih())+" Kg");
         holder.tvBrondol.setText(String.valueOf(panenLahan.getBeratBrondol())+" Kg");

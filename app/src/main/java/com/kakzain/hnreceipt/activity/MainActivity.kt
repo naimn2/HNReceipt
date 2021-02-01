@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.kakzain.hnreceipt.R
 import com.kakzain.hnreceipt.db.IDatabaseHelper
@@ -57,7 +56,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun readDBLahan() {
-        dbLahanHelper.setReference(Lahan.LAHAN_REFERENCE)
+        dbLahanHelper.setReference(Lahan.LAHAN_DB_REFERENCE)
             .addOnceListValuesEventListenerCallback(object : IDatabaseHelper.ListValuesEventListenerCallback<Lahan> {
                 override fun onDataUpdate(values: ArrayList<Lahan>?, ids: ArrayList<String>?) {
                     if (values != null && ids != null) {

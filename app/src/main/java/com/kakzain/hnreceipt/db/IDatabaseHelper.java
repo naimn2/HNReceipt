@@ -1,6 +1,10 @@
 package com.kakzain.hnreceipt.db;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
+
+import javax.annotation.Nonnull;
 
 public interface IDatabaseHelper<E> {
     IDatabaseHelper<E> setReference(String ref);
@@ -20,9 +24,11 @@ public interface IDatabaseHelper<E> {
     void addOnceListValuesEventListenerCallback(ListValuesEventListenerCallback<E> listValuesEventListenerCallback, Class<E> eClass);
     void addOnceValueEventListenerCallback(ValueEventListenerCallback<E> valueEventListenerCallback, Class<E> eClass);
     void addChildEventListenerCallback(ChildEventListenerCallback childEventListenerCallback, Class<E> eClass);
-    void writeValue(E value);
-    String pushWriteValue(E value);
+    void writeValue(@NonNull E value);
+    String pushWriteValue(@Nonnull E value);
+    void delete();
     void close();
+    void insertTimestamp();
 
     interface ListValuesEventListenerCallback<E> {
         void onDataUpdate(ArrayList<E> values, ArrayList<String> ids);

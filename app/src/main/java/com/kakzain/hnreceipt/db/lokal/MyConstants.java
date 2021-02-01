@@ -9,6 +9,7 @@ import com.kakzain.hnreceipt.model.Posisi;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,13 +43,25 @@ public class MyConstants {
     public static Map<String, Karyawan> getAllKaryawan(@Nonnull Context context){
         ILokalHelper<Karyawan> lokalKaryawan = new LokalHelper<>(context, LokalHelper.DB_WHICH_KARYAWAN);
         lokalKaryawan.open();
-        Map<String, Karyawan> karyawanMap = new HashMap<>();
+        Map<String, Karyawan> karyawanMap = new LinkedHashMap<>();
         if (!lokalKaryawan.isEmpty()){
-            karyawanMap.putAll(lokalKaryawan.getItems(Karyawan.class));
+            karyawanMap = lokalKaryawan.getItems(Karyawan.class);
         }
         lokalKaryawan.close();
         Log.d(TAG, "getAllKaryawan: size: "+karyawanMap.size());
         return karyawanMap;
+    }
+
+    public static Map<String, Lahan> getAllLahan(@Nonnull Context context){
+        ILokalHelper<Lahan> lokalLahan = new LokalHelper<>(context, LokalHelper.DB_WHICH_LAHAN);
+        lokalLahan.open();
+        Map<String, Lahan> mapLahan = new LinkedHashMap<>();
+        if (!lokalLahan.isEmpty()){
+            mapLahan = lokalLahan.getItems(Lahan.class);
+        }
+        lokalLahan.close();
+        Log.d(TAG, "getAllLahan: size: "+mapLahan.size());
+        return mapLahan;
     }
 
     public static Map<Integer, Posisi> getAllPosisi(@Nonnull Context context){

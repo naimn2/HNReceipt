@@ -16,13 +16,18 @@
     <RelativeLayout
         android:id="@+id/rl_activityDaftarLahan"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar_activityDaftarLahan">
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar_activityDaftarLahan"
+        android:layout_margin="@dimen/normal_margin"
+        android:background="@color/white"
+        android:elevation="@dimen/normal_elevation">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_activityDaftarLahan"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_list_nama_umum"
+            android:layout_above="@+id/tv_activityDaftarLahan_sinkron"/>
 
         <ProgressBar
             android:id="@+id/pb_activityDaftarLahan"
@@ -31,15 +36,23 @@
             android:layout_centerInParent="true"
             android:visibility="invisible"/>
 
-    </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_thin"
+            android:background="@color/veryLightGray"
+            android:layout_above="@+id/tv_activityDaftarLahan_sinkron"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/sinkronkan"
-        android:textColor="#00f"
-        android:onClick="sinkronClickHandle"
-        android:layout_margin="@dimen/very_high_margin"
-        android:layout_below="@id/rl_activityDaftarLahan"/>
+        <TextView
+            android:id="@+id/tv_activityDaftarLahan_sinkron"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sinkronkan"
+            android:textColor="#00f"
+            android:onClick="sinkronClickHandle"
+            android:layout_margin="@dimen/high_margin"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"/>
+
+    </RelativeLayout>
 
 </RelativeLayout>

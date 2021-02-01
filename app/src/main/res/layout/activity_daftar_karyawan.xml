@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/MyLightToolbar"
+        app:menu="@menu/menu_toolbar_daftar_karyawan"
         android:background="@color/white"/>
 
     <RelativeLayout
@@ -18,7 +19,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar_activityDaftarKaryawan"
-        android:layout_above="@id/tv_activityDaftarKaryawan_hapus"
         android:layout_margin="@dimen/normal_margin"
         android:background="@color/white"
         android:elevation="@dimen/normal_elevation">
@@ -36,7 +36,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_above="@id/tv_activityDaftarKaryawan_sinkron"
             android:visibility="invisible"/>
 
         <View
@@ -57,25 +56,5 @@
             android:layout_centerHorizontal="true"/>
 
     </RelativeLayout>
-
-    <Button
-        android:id="@+id/tv_activityDaftarKaryawan_hapus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hapus_karyawan"
-        android:textAllCaps="false"
-        android:backgroundTint="@color/lightGray"
-        android:layout_margin="@dimen/normal_margin"
-        android:layout_alignParentBottom="true"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/tambah_karyawan"
-        android:layout_alignParentEnd="true"
-        android:backgroundTint="@color/teal_700"
-        android:onClick="tambahClickHandle"
-        android:layout_margin="@dimen/normal_margin"
-        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

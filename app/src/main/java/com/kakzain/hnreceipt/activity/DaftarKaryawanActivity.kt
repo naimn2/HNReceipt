@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
@@ -20,7 +21,6 @@ import com.kakzain.hnreceipt.db.lokal.LokalHelper
 import com.kakzain.hnreceipt.db.lokal.MyConstants
 import com.kakzain.hnreceipt.model.Karyawan
 import kotlinx.android.synthetic.main.activity_daftar_karyawan.*
-import kotlinx.android.synthetic.main.dialog_form_input_nama.*
 
 class DaftarKaryawanActivity : AppCompatActivity() {
     private val TAG = DaftarKaryawanActivity::class.java.simpleName
@@ -37,6 +37,7 @@ class DaftarKaryawanActivity : AppCompatActivity() {
         lokalKaryawan = LokalHelper<Karyawan>(this, LokalHelper.DB_WHICH_KARYAWAN)
         dbKaryawanHelper = FirestoreHelper<Karyawan>()
             .setReference(Karyawan.KARYAWAN_DB_REFERENCE)
+            .orderBy(FirestoreHelper.TIMESTAMP_COLUMN, FirestoreHelper.ASCENDING_DIRECTION)
 
         setSupportActionBar(toolbar_activityDaftarKaryawan)
         title = getString(R.string.daftar_karyawan)
@@ -55,31 +56,34 @@ class DaftarKaryawanActivity : AppCompatActivity() {
     }
 
     fun sinkronClickHandle(view: View) {
-        showLoading(true)
-        dbKaryawanHelper.addOnceListValuesEventListenerCallback(
-            object : IDatabaseHelper.ListValuesEventListenerCallback<Karyawan> {
-            override fun onDataUpdate(values: ArrayList<Karyawan>?, ids: ArrayList<String>?) {
-                showLoading(false)
-                if (values != null && ids != null){
-                    writeToLocal(values, ids)
-                }
-            }
-
-            override fun onListValueEventListenerCancelled(errorMessage: String?) {
-                showLoading(false)
-                Log.e(TAG, "onListValueEventListenerCancelled: $errorMessage")
-            }
-        }, Karyawan::class.java)
+        sinkronDataKaryawan()
     }
 
-    private fun writeToLocal(values: java.util.ArrayList<Karyawan>, ids: java.util.ArrayList<String>) {
+    private fun sinkronDataKaryawan() {
+        showLoading(true)
+        dbKaryawanHelper
+                .addOnceListValuesEventListenerCallback(
+                        object : IDatabaseHelper.ListValuesEventListenerCallback<Karyawan> {
+                            override fun onDataUpdate(values: ArrayList<Karyawan>?, ids: ArrayList<String>?) {
+                                showLoading(false)
+                                if (values != null && ids != null) {
+                                    Log.d(TAG, "onDataUpdate: Server size: ${values.size}")
+                                    writeToLocal(values, ids)
+                                }
+                            }
+
+                            override fun onListValueEventListenerCancelled(errorMessage: String?) {
+                                showLoading(false)
+                                Log.e(TAG, "onListValueEventListenerCancelled: $errorMessage")
+                            }
+                        }, Karyawan::class.java)
+    }
+
+    private fun writeToLocal(values: ArrayList<Karyawan>, ids: ArrayList<String>) {
         lokalKaryawan.open()
+        lokalKaryawan.deleteAll()
         for (i: Int in 0 until values.size){
-            if (lokalKaryawan.isExist(ids[i])){
-                lokalKaryawan.update(ids[i], Karyawan(values[i].nama))
-            } else {
-                lokalKaryawan.insert(ids[i], Karyawan(values[i].nama))
-            }
+            lokalKaryawan.insert(ids[i], Karyawan(values[i].nama))
         }
         lokalKaryawan.close()
         updateDataRecyclerViewAdapter()
@@ -87,9 +91,14 @@ class DaftarKaryawanActivity : AppCompatActivity() {
 
     private fun updateDataRecyclerViewAdapter(){
         mapKaryawan = MyConstants.getAllKaryawan(this)
+        for (s in mapKaryawan.keys){
+            val k = mapKaryawan[s]
+            Log.d(TAG, "updateDataRecyclerViewAdapter: ${k?.nama}")
+        }
         listKaryawanAdapter.setData(
             ArrayList<Karyawan>(mapKaryawan.values)
         )
+        Log.d(TAG, "updateDataRecyclerViewAdapter: Local size: ${mapKaryawan.size}")
     }
 
     private fun showLoading(b: Boolean){
@@ -102,12 +111,7 @@ class DaftarKaryawanActivity : AppCompatActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        finish()
-        return super.onOptionsItemSelected(item)
-    }
-
-    fun tambahClickHandle(view: View) {
+    fun tambahKaryawan() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_form_input_nama, null, false)
         val tvTitle = dialogView.findViewById<TextView>(R.id.tv_dialogFormInputNama_title)
         val etInputNama = dialogView.findViewById<EditText>(R.id.et_dialogFormInputNama_input)
@@ -117,6 +121,7 @@ class DaftarKaryawanActivity : AppCompatActivity() {
         val mAlertDialog = AlertDialog.Builder(this).setView(dialogView).create()
         tvTitle.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_baseline_person_add, 0, 0, 0)
         etInputNama.hint = getString(R.string.nama_karyawan)
+        btnTambah.text = getString(R.string.tambah_karyawan)
         btnTambah.setOnClickListener {
             val newKaryawan = Karyawan(etInputNama.text.toString())
             if (TextUtils.isEmpty(etInputNama.text)){
@@ -124,9 +129,10 @@ class DaftarKaryawanActivity : AppCompatActivity() {
                 etInputNama.requestFocus()
                 return@setOnClickListener
             }
-            dbKaryawanHelper.pushWriteValue(newKaryawan)
+            val id = dbKaryawanHelper.pushWriteValue(newKaryawan)
+            dbKaryawanHelper.refChild(id).insertTimestamp()
             mAlertDialog.dismiss()
-            sinkronClickHandle(view)
+            sinkronDataKaryawan()
             Toast.makeText(this, getString(R.string.karyawan_ditambah), Toast.LENGTH_SHORT).show()
         }
         etTutup.setOnClickListener {
@@ -137,10 +143,25 @@ class DaftarKaryawanActivity : AppCompatActivity() {
     }
 
     private fun hapusKaryawan(id: String) {
-        dbKaryawanHelper.refChild(id).writeValue(null)
+        dbKaryawanHelper.refChild(id).delete()
         lokalKaryawan.open()
         lokalKaryawan.delete(id)
         lokalKaryawan.close()
-        updateDataRecyclerViewAdapter()
+        sinkronDataKaryawan()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_toolbar_daftar_karyawan, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home){
+            finish()
+        } else if (item.itemId == R.id.item_menuToolbarDaftarKaryawan_tambahKaryawan){
+            tambahKaryawan()
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 }

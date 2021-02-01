@@ -10,9 +10,11 @@ import com.kakzain.hnreceipt.model.Lahan;
 import com.kakzain.hnreceipt.model.Posisi;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.kakzain.hnreceipt.db.lokal.MySqliteOpenHelper.DB_TABLES;
+import static com.kakzain.hnreceipt.db.lokal.MySqliteOpenHelper.SQL_CREATE_TABLES;
 import static com.kakzain.hnreceipt.db.lokal.MySqliteOpenHelper._ID;
 
 public class LokalHelper<E> implements ILokalHelper<E>{
@@ -64,10 +66,10 @@ public class LokalHelper<E> implements ILokalHelper<E>{
 
     @Override
     public Map<String, E> getItems(Class<E> eClass) {
-        Map<String, E> items = new HashMap<>();
         Cursor cursor = db.query(DB_TABLES[which],null,null,
-                null,null,null,_ID+" ASC",null);
+                null,null,null,null,null);
         cursor.moveToFirst();
+        Map<String, E> items = new LinkedHashMap<>();
         if (cursor.getCount() > 0){
             switch (which){
                 case DB_WHICH_KARYAWAN:
@@ -143,7 +145,17 @@ public class LokalHelper<E> implements ILokalHelper<E>{
     @Override
     public boolean isEmpty(){
         Cursor cursor = db.query(DB_TABLES[which], null, null, null,
-                null, null, _ID+" ASC", null);
+                null, null, null, null);
         return !cursor.moveToFirst();
+    }
+
+    @Override
+    public void deleteAll(){
+        db.execSQL("delete from "+ DB_TABLES[which]);
+    }
+
+    @Override
+    public void createTable(){
+        db.execSQL(SQL_CREATE_TABLES[which]);
     }
 }

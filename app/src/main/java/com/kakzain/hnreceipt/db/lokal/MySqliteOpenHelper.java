@@ -16,7 +16,7 @@ public class MySqliteOpenHelper extends SQLiteOpenHelper {
     public static final int DB_VERSION = 3;
     public static final String _ID = "id";
 
-    private static final String[] SQL_CREATE_TABLES = new String[]{
+    public static final String[] SQL_CREATE_TABLES = new String[]{
             String.format("CREATE TABLE %s (" +
                             "%s TEXT PRIMARY KEY, " +
                             "%s TEXT NOT NULL" +

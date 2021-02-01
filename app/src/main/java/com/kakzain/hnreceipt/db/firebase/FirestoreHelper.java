@@ -11,6 +11,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
@@ -22,12 +23,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+
+import javax.annotation.Nonnull;
 
 public class FirestoreHelper<E> implements IDatabaseHelper<E> {
     private static final String TAG = FirestoreHelper.class.getSimpleName();
     public static final int ASCENDING_DIRECTION = 0;
     public static final int DESCENDING_DIRECTION = 1;
+    public static final String TIMESTAMP_COLUMN = "timestamp";
     private Class<E> eClass;
 //    private String reference;
     private CollectionReference collectionReference;
@@ -188,15 +193,23 @@ public class FirestoreHelper<E> implements IDatabaseHelper<E> {
     }
 
     @Override
-    public void writeValue(E value) {
+    public void writeValue(@NonNull E value) {
+        Log.d(TAG, "writeValue: "+documentReference);
         documentReference.set(value);
     }
 
     @Override
-    public String pushWriteValue(E value) {
+    public String pushWriteValue(@Nonnull E value) {
         String id = IDGenerator.generateUniqueKey(new Date().getTime());
         collectionReference.document(id).set(value);
         return id;
+    }
+
+    @Override
+    public void delete(){
+        if (documentReference!=null) {
+            documentReference.delete();
+        }
     }
 
     @Override
@@ -281,5 +294,12 @@ public class FirestoreHelper<E> implements IDatabaseHelper<E> {
                 valueEventListenerCallback.onValueEventListenerCancelled(error.getMessage());
             }
         }
+    }
+
+    @Override
+    public void insertTimestamp(){
+        Map<String,Object> updates = new HashMap<>();
+        updates.put(TIMESTAMP_COLUMN, FieldValue.serverTimestamp());
+        documentReference.update(updates);
     }
 }

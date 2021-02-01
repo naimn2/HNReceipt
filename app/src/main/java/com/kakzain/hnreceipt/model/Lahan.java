@@ -4,7 +4,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class Lahan {
     public static final String NAMA_LAHAN_COLUMN = "namaLahan";
-    public static final String LAHAN_REFERENCE = "lahan";
+    public static final String LAHAN_DB_REFERENCE = "lahan";
 
     private String namaLahan;
 

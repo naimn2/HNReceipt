@@ -74,4 +74,9 @@
     <string name="unvalid_email">Email tidak valid</string>
     <string name="karyawan_ditambah">Karyawan Ditambah</string>
     <string name="hapus_karyawan">Hapus Karyawan</string>
+    <string name="tambah_lahan">Tambah Lahan</string>
+    <string name="daftar_lahan">Daftar Lahan</string>
+    <string name="lahan_ditambah">Lahan Ditambah</string>
+    <string name="nama_lahan">Nama Lahan</string>
+    <string name="lahan_ini_tidak_lagi_tersedia">Lahan ini tidak lagi tersedia</string>
 </resources>

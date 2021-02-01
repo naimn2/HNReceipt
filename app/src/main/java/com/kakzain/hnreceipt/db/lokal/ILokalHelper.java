@@ -13,4 +13,8 @@ public interface ILokalHelper<E> {
     int delete(String id);
     boolean isExist(String...id);
     boolean isEmpty();
+
+    void createTable();
+
+    void deleteAll();
 }

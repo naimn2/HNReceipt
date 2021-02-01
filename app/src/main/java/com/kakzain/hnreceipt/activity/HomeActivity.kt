@@ -41,7 +41,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
     fun daftarLahanHandler(view: View) {
-
+        val mIntent = Intent(this, DaftarLahanActivity::class.java)
+        startActivity(mIntent)
     }
 
     private var isClickBackTwice = false;
