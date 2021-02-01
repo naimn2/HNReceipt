@@ -27,18 +27,18 @@ class LoginActivity : AppCompatActivity() {
 
         if (TextUtils.isEmpty(email)){
             et_activityLogin_email.requestFocus()
-            et_activityLogin_email.error = "Tidak boleh kosong"
+            et_activityLogin_email.error = getString(R.string.tidak_boleh_kosong)
             return
         }
         if (!isEmailValid(email)){
             et_activityLogin_email.requestFocus()
-            et_activityLogin_email.error = "Email tidak valid"
+            et_activityLogin_email.error = getString(R.string.unvalid_email)
             return
         }
 
         if (TextUtils.isEmpty(password)){
             et_activityLogin_password.requestFocus()
-            et_activityLogin_password.error = "Tidak boleh kosong"
+            et_activityLogin_password.error = getString(R.string.tidak_boleh_kosong)
             return
         }
 
@@ -60,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         applicationContext,
-                        getString(R.string.unvalid_email_or_password),
+                        getString(R.string.wrong_email_or_password),
                         Toast.LENGTH_SHORT
                     ).show()
                     Log.d(TAG, "onComplete: Failed ${task.exception}")

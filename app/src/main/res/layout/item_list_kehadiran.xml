@@ -7,18 +7,18 @@
     android:orientation="horizontal">
 
     <TextView
-        android:id="@+id/tv_itemListKaryawan_nama"
+        android:id="@+id/tv_itemListKehadiran_nama"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/normal_margin"
         android:text="@string/nama_karyawan"
-        app:layout_constraintBottom_toBottomOf="@+id/spin_itemListKaryawan_check"
-        app:layout_constraintEnd_toStartOf="@+id/spin_itemListKaryawan_check"
+        app:layout_constraintBottom_toBottomOf="@+id/spin_itemListKehadiran_check"
+        app:layout_constraintEnd_toStartOf="@+id/spin_itemListKehadiran_check"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/spin_itemListKaryawan_check" />
+        app:layout_constraintTop_toTopOf="@+id/spin_itemListKehadiran_check" />
 
     <Spinner
-        android:id="@+id/spin_itemListKaryawan_check"
+        android:id="@+id/spin_itemListKehadiran_check"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:spinnerMode="dropdown"
@@ -27,13 +27,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:id="@+id/view_itemListKaryawan_divider"
+        android:id="@+id/view_itemListKehadiran_divider"
         android:layout_width="0dp"
         android:layout_height="@dimen/divider_thin"
         android:layout_marginEnd="@dimen/normal_margin"
         android:background="@color/veryLightGray"
-        app:layout_constraintStart_toStartOf="@+id/tv_itemListKaryawan_nama"
-        app:layout_constraintEnd_toStartOf="@+id/spin_itemListKaryawan_check"
-        app:layout_constraintTop_toBottomOf="@+id/spin_itemListKaryawan_check" />
+        app:layout_constraintStart_toStartOf="@+id/tv_itemListKehadiran_nama"
+        app:layout_constraintEnd_toStartOf="@+id/spin_itemListKehadiran_check"
+        app:layout_constraintTop_toBottomOf="@+id/spin_itemListKehadiran_check" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

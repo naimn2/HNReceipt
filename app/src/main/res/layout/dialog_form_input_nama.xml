@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_dialogFormInputNama_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tambah_karyawan"
+        android:layout_marginStart="@dimen/very_high_margin"
+        android:layout_marginEnd="@dimen/very_high_margin"
+        android:layout_marginTop="@dimen/high_margin"
+        android:layout_marginBottom="@dimen/high_margin"
+        android:layout_margin="@dimen/high_margin"
+        android:drawablePadding="@dimen/high_margin"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_thin"
+        android:background="@color/lightGray"/>
+
+    <EditText
+        android:id="@+id/et_dialogFormInputNama_input"
+        android:layout_marginTop="@dimen/high_margin"
+        android:layout_marginBottom="@dimen/normal_margin"
+        android:layout_marginStart="@dimen/very_high_margin"
+        android:layout_marginEnd="@dimen/very_high_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btn_dialogFormInputNama_tambah"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/very_high_margin"
+        android:layout_marginEnd="@dimen/very_high_margin"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:backgroundTint="@color/teal_700"
+        android:text="@string/tambah"
+        android:textAllCaps="false"/>
+
+    <TextView
+        android:id="@+id/tv_dialogFormInputNama_tutup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/normal_margin"
+        android:layout_marginBottom="@dimen/very_high_margin"
+        android:text="@string/tutup"/>
+
+</LinearLayout>

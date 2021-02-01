@@ -65,8 +65,13 @@
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="mohon_tunggu">Mohon Tunggu</string>
-    <string name="unvalid_email_or_password">Password atau Email Salah</string>
+    <string name="wrong_email_or_password">Password atau Email Salah</string>
     <string name="login_berhasil">Login Berhasil</string>
     <string name="daftar_karyawan">Daftar Karyawan</string>
     <string name="sinkronkan">Sinkronkan</string>
+    <string name="tambah_karyawan">Tambah Karyawan</string>
+    <string name="tidak_boleh_kosong">Tidak boleh kosong</string>
+    <string name="unvalid_email">Email tidak valid</string>
+    <string name="karyawan_ditambah">Karyawan Ditambah</string>
+    <string name="hapus_karyawan">Hapus Karyawan</string>
 </resources>

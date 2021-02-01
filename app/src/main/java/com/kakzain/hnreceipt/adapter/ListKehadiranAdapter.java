@@ -1,6 +1,7 @@
 package com.kakzain.hnreceipt.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ListKehadiranAdapter extends RecyclerView.Adapter<ListKehadiranAdapter.ViewHolder> {
+    private static final String TAG = ListKehadiranAdapter.class.getSimpleName();
     private final Context context;
     private final ArrayList<Karyawan> listKaryawan;
     private OnClickListenerCallback onHadirListenerCallback;
@@ -33,6 +35,7 @@ public class ListKehadiranAdapter extends RecyclerView.Adapter<ListKehadiranAdap
         this.listKaryawan.clear();
         this.listKaryawan.addAll(listKaryawan);
         notifyDataSetChanged();
+        Log.d(TAG, "setData: size"+this.listKaryawan.size());
     }
 
     public void setOnHadirListenerCallback(OnClickListenerCallback onHadirListenerCallback) {
@@ -42,7 +45,7 @@ public class ListKehadiranAdapter extends RecyclerView.Adapter<ListKehadiranAdap
     @NonNull
     @Override
     public ListKehadiranAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_list_karyawan, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_list_kehadiran, parent, false);
         return new ViewHolder(view);
     }
 
@@ -70,7 +73,7 @@ public class ListKehadiranAdapter extends RecyclerView.Adapter<ListKehadiranAdap
 
             }
         });
-        if (position%2!=0 && position != listKaryawan.size()-1){
+        if (position%2 != 0 && position != listKaryawan.size()-1){
             holder.divider.setVisibility(View.VISIBLE);
         } else {
             holder.divider.setVisibility(View.INVISIBLE);
@@ -82,21 +85,15 @@ public class ListKehadiranAdapter extends RecyclerView.Adapter<ListKehadiranAdap
         return listKaryawan.size();
     }
 
-    private ArrayList<String> concatArray(String[] init, String[] array){
-        ArrayList<String> lahanArray = new ArrayList<>(Arrays.asList(init));
-        lahanArray.addAll(Arrays.asList(array));
-        return lahanArray;
-    }
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvNama;
         private final Spinner spinHadir;
         private final View divider;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvNama = itemView.findViewById(R.id.tv_itemListKaryawan_nama);
-            spinHadir = itemView.findViewById(R.id.spin_itemListKaryawan_check);
-            divider = itemView.findViewById(R.id.view_itemListKaryawan_divider);
+            tvNama = itemView.findViewById(R.id.tv_itemListKehadiran_nama);
+            spinHadir = itemView.findViewById(R.id.spin_itemListKehadiran_check);
+            divider = itemView.findViewById(R.id.view_itemListKehadiran_divider);
         }
     }
 

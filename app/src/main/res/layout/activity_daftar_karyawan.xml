@@ -16,30 +16,66 @@
     <RelativeLayout
         android:id="@+id/rl_activityDaftarKaryawan"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar_activityDaftarKaryawan">
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar_activityDaftarKaryawan"
+        android:layout_above="@id/tv_activityDaftarKaryawan_hapus"
+        android:layout_margin="@dimen/normal_margin"
+        android:background="@color/white"
+        android:elevation="@dimen/normal_elevation">
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_activityDaftarKaryawan"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"
+            tools:listitem="@layout/item_list_nama_umum"
+            android:layout_above="@+id/tv_activityDaftarKaryawan_sinkron"/>
 
         <ProgressBar
             android:id="@+id/pb_activityDaftarKaryawan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:layout_above="@id/tv_activityDaftarKaryawan_sinkron"
             android:visibility="invisible"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_thin"
+            android:background="@color/veryLightGray"
+            android:layout_above="@+id/tv_activityDaftarKaryawan_sinkron"/>
+
+        <TextView
+            android:id="@+id/tv_activityDaftarKaryawan_sinkron"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sinkronkan"
+            android:textColor="#00f"
+            android:onClick="sinkronClickHandle"
+            android:layout_margin="@dimen/high_margin"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"/>
 
     </RelativeLayout>
 
-    <TextView
+    <Button
+        android:id="@+id/tv_activityDaftarKaryawan_hapus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/sinkronkan"
-        android:textColor="#00f"
-        android:onClick="sinkronClickHandle"
-        android:layout_margin="@dimen/very_high_margin"
-        android:layout_below="@id/rl_activityDaftarKaryawan"/>
+        android:text="@string/hapus_karyawan"
+        android:textAllCaps="false"
+        android:backgroundTint="@color/lightGray"
+        android:layout_margin="@dimen/normal_margin"
+        android:layout_alignParentBottom="true"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tambah_karyawan"
+        android:layout_alignParentEnd="true"
+        android:backgroundTint="@color/teal_700"
+        android:onClick="tambahClickHandle"
+        android:layout_margin="@dimen/normal_margin"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

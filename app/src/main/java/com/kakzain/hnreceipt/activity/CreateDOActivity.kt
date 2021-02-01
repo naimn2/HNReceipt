@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -59,6 +60,7 @@ class CreateDOActivity : AppCompatActivity() {
 
         val karyawanMap = MyConstants.getAllKaryawan(this)
         listKaryawan = ArrayList(karyawanMap.values)
+        Log.d(TAG, "onCreate: listKaryawan size: ${listKaryawan.size}")
         listIdKaryawan = ArrayList(karyawanMap.keys)
         idDO = intent.getStringExtra(ID_DO_EXTRA)
 
@@ -142,11 +144,7 @@ class CreateDOActivity : AppCompatActivity() {
         val tvTutup = dialogView.findViewById<TextView>(R.id.tv_dialogTambahLahanPanen_tutup)
 
         // SIAPKAN RECYCLER VIEW KEHADIRAN KARYAWAN
-        val linearLayoutManager = object: LinearLayoutManager(this){
-            override fun canScrollVertically(): Boolean {
-                return false
-            }
-        }
+        val linearLayoutManager = LinearLayoutManager(this)
         adapterKehadiran = ListKehadiranAdapter(this)
         adapterKehadiran.setData(listKaryawan)
 
@@ -162,8 +160,11 @@ class CreateDOActivity : AppCompatActivity() {
                 mapKehadiran[position] = Kehadiran(idKaryawan, posisiKeys[i-1])
             }
         }
+        rvKehadiran.setHasFixedSize(true)
+
         rvKehadiran.layoutManager = linearLayoutManager
         rvKehadiran.adapter = adapterKehadiran
+        Log.d(TAG, "adapterKehadiranCount: ${rvKehadiran.adapter?.itemCount}")
 
         // BUILD ALERT DIALOG TAMBAH LAHAN PANEN
         val alertDialog = AlertDialog.Builder(this).setView(dialogView).create()

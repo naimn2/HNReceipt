@@ -47,6 +47,7 @@ public class MyConstants {
             karyawanMap.putAll(lokalKaryawan.getItems(Karyawan.class));
         }
         lokalKaryawan.close();
+        Log.d(TAG, "getAllKaryawan: size: "+karyawanMap.size());
         return karyawanMap;
     }
 
