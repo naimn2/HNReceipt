@@ -13,9 +13,4 @@ public class CurrencyFormatter {
 
         return "Rp " + result + ","+s[1];
     }
-
-    public static double unformat(String str){
-        // TODO("Not implemented yet")
-        return 0.0;
-    }
 }

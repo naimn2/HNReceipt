@@ -15,24 +15,38 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.kakzain.hnreceipt.db.lokal.MyConstants;
 import com.kakzain.hnreceipt.R;
+import com.kakzain.hnreceipt.model.Lahan;
 import com.kakzain.hnreceipt.model.PanenSawitLahan;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ListPanenLahanAdapter extends RecyclerView.Adapter<ListPanenLahanAdapter.ViewHolder> {
     private Context context;
     private List<PanenSawitLahan> listPanenSawitLahan;
+    private Map<Integer, String> mapNamaLahan;
     private OnMenuClickListenerCallback onMenuClickListenerCallback;
 
     public ListPanenLahanAdapter(Context context) {
         this.listPanenSawitLahan = new ArrayList<>();
         this.context = context;
+        mapNamaLahan = MyConstants.getNamaLahanAndIdMap(context, null);
     }
 
     public void setData(List<PanenSawitLahan> listPanenSawitLahan){
         this.listPanenSawitLahan.clear();
         this.listPanenSawitLahan.addAll(listPanenSawitLahan);
+        notifyDataSetChanged();
+    }
+
+    public void updateLahan(List<Lahan> listLahan, List<String> ids) {
+        this.mapNamaLahan.clear();
+        for (int i = 0; i < listLahan.size(); i++) {
+            String namaLahan = listLahan.get(i).getNamaLahan();
+            Integer idLahan = Integer.parseInt(ids.get(i));
+            this.mapNamaLahan.put(idLahan, namaLahan);
+        }
         notifyDataSetChanged();
     }
 
@@ -53,9 +67,9 @@ public class ListPanenLahanAdapter extends RecyclerView.Adapter<ListPanenLahanAd
         int jumlahHadir = panenLahan.getKehadiran().size();
         int idLahan = panenLahan.getIdLahan();
 
-        String namaLahan = MyConstants.getNamaLahanAndIdMap(context, null).get(idLahan);
+        String namaLahan = mapNamaLahan.get(idLahan);
         holder.tvLahan.setText(TextUtils.isEmpty(namaLahan)?
-                context.getString(R.string.lahan_ini_tidak_lagi_tersedia): namaLahan);
+                context.getString(R.string.unavailable): namaLahan);
         holder.tvJumlahHadir.setText(String.format("%d Hadir", jumlahHadir));
         holder.tvBersih.setText(String.valueOf(panenLahan.getBeratBersih())+" Kg");
         holder.tvBrondol.setText(String.valueOf(panenLahan.getBeratBrondol())+" Kg");

@@ -41,6 +41,7 @@ class CreateDOActivity : AppCompatActivity() {
     private lateinit var dbKaryawanHelper: IDatabaseHelper<Karyawan>
     private lateinit var dbDOHelper: IDatabaseHelper<DeliveryOrder>
     private lateinit var dbPanenSawitLahan: IDatabaseHelper<PanenSawitLahan>
+    private lateinit var dbLahanHelper: IDatabaseHelper<Lahan>
     private lateinit var adapterKehadiran: ListKehadiranAdapter
     private lateinit var panenLahanAdapter: ListPanenLahanAdapter
     private lateinit var listKaryawan: ArrayList<Karyawan>
@@ -68,6 +69,8 @@ class CreateDOActivity : AppCompatActivity() {
         dbDOHelper = FirestoreHelper()
         dbDOHelper.setReference(DeliveryOrder.DO_DB_REFERENCE+"/"+idDO)
         dbPanenSawitLahan = FirestoreHelper()
+        dbLahanHelper = FirestoreHelper()
+        dbLahanHelper.setReference(Lahan.LAHAN_DB_REFERENCE)
         mapKehadiran = HashMap()
 
         btn_activityCreateDO_tambahLahanPanen.setOnClickListener {
@@ -78,6 +81,7 @@ class CreateDOActivity : AppCompatActivity() {
         rv_activityCreateDO_listLahanPanen.adapter = panenLahanAdapter
         rv_activityCreateDO_listLahanPanen.layoutManager = linearLayoutManager
         readDOdb()
+        readLahanDb()
     }
 
     private fun initListenerPanenLahanAdapter() {
@@ -155,13 +159,17 @@ class CreateDOActivity : AppCompatActivity() {
         // ON POSISI SPINNER LISTENER CALLBACK
         adapterKehadiran.setOnHadirListenerCallback { i, position ->
             val idKaryawan = listIdKaryawan[position]
-            val posisiKeys = ArrayList<Int>(MyConstants.getAllPosisi(this).keys)
+//            val posisiKeys = ArrayList<Int>(MyConstants.getAllPosisi(this).keys)
+            val posisiKeys = ArrayList<Int>(MyConstants.getIdDanNamaPosisi(
+                    this, null, MyConstants.POSISI_SOPIR_INDEKS).keys)
+            Log.d(TAG, "showDialogTambahLahanPanen: ${posisiKeys.toString()}")
             Log.d(TAG, "showDialogTambahLahanPanen: i: $i")
             Log.d(TAG, "showDialogTambahLahanPanen: position: $position")
             if (i == 0){
                 mapKehadiran.remove(position)
             } else {
                 mapKehadiran[position] = Kehadiran(idKaryawan, posisiKeys[i-1])
+                Log.d(TAG, "showDialogTambahLahanPanen id posisi: ${posisiKeys[i-1]}")
             }
         }
         rvKehadiran.setHasFixedSize(true)
@@ -260,7 +268,7 @@ class CreateDOActivity : AppCompatActivity() {
         listSopirAdapter.setOnSopirListenerCallback { b, i ->
             if (b){
                 mapSopir[i] = Kehadiran(listIdKaryawan[i],
-                    MyConstants.getNamaPosisiIndeks(this)["Sopir"]!!)
+                    MyConstants.POSISI_SOPIR_INDEKS)
                 Log.d(TAG, "map sopir size: ${mapSopir.size}")
             } else {
                 mapSopir.remove(i)
@@ -286,8 +294,8 @@ class CreateDOActivity : AppCompatActivity() {
                 val upahBrondol = Upah(MyConstants.POSISI_BRONDOL_INDEKS, UnitValidator.unitCurrencytoInt(
                     etUpahBrondol.text.toString()).toFloat())
                 val upah = ArrayList<Upah>()
-                upah.add(upahPemanen)
                 upah.add(upahPengangkut)
+                upah.add(upahPemanen)
                 upah.add(upahSopir)
                 upah.add(upahBrondol)
                 updateCurrentDOMoreDetail(
@@ -365,18 +373,45 @@ class CreateDOActivity : AppCompatActivity() {
             for (currentPanenLahan in listPanenLahan){
 
                 val beratBersihPanen = currentPanenLahan.beratBersih
-                val jumlahHadir = currentPanenLahan.kehadiran.size
+                val beratBrondolPanen = currentPanenLahan.beratBrondol
 
+                // HITUNG JUMLAH HADIR PENGANGKUT/PEMANEN/BRONDOL
+                val jumlahHadirArray = IntArray(2) // {PK/PM, BR}
+                for (currentKehadiran in currentPanenLahan.kehadiran){
+                    // KONDISI UNTUK KEHADIRAN POSISI PK ATAU PM
+                    if (currentKehadiran.posisi == MyConstants.POSISI_PEMANEN_INDEKS ||
+                            currentKehadiran.posisi == MyConstants.POSISI_PENGANGKUT_INDEKS){
+                        jumlahHadirArray[0]++
+                    }
+                    // KONDISI UNTUK KEHADIRAN POSISI BR
+                    else {
+                        jumlahHadirArray[1]++
+                    }
+                }
                 // TELUSURI SETIAP KEHADIRAN
+                // KHUSUS PEMANEN/PENGANGKUT/BRONDOL
                 kehadiran@
                 for (currentKehadiran in currentPanenLahan.kehadiran){
 
                     // CEK KEHADIRAN CURRENT KARYAWAN LALU UPDATE GAJI
-                    // KHUSUS PEMANEN/PENGANGKUT
-                    val mapNamaPosisiIndeks = MyConstants.getNamaPosisiIndeks(this)
                     if (keyKaryawan == currentKehadiran.idKaryawan){
-                        val upahPMNPK = mDO.upah[currentKehadiran.posisi].upah
-                        gaji += beratBersihPanen*upahPMNPK/jumlahHadir
+                        val idPosisi = currentKehadiran.posisi
+                        var upahPMNPK = mDO.upah[idPosisi].upah
+                        var jumlahHadir: Int
+                        var beratTemp: Float
+
+                        // KONDISI KETIKA POSISI PK/PM ATAU BR
+                        if (currentKehadiran.posisi == MyConstants.POSISI_PEMANEN_INDEKS ||
+                                currentKehadiran.posisi == MyConstants.POSISI_PENGANGKUT_INDEKS){
+                            jumlahHadir = jumlahHadirArray[0]
+                            beratTemp = beratBersihPanen
+                        } else {
+                            jumlahHadir = jumlahHadirArray[1]
+                            beratTemp = beratBrondolPanen
+                        }
+                        val gajiPanenLahan = beratTemp*upahPMNPK/jumlahHadir
+                        gaji += gajiPanenLahan
+                        Log.d(TAG, "summaryDO: gaji panen lahan ${currentPanenLahan.idLahan} = $beratBersihPanen * $upahPMNPK / $jumlahHadir = $gajiPanenLahan")
                         break@kehadiran
                     }
                 }
@@ -387,14 +422,14 @@ class CreateDOActivity : AppCompatActivity() {
             for (currentSopir in mDO.sopir){
                 if (currentSopir.idKaryawan == keyKaryawan){
                     val upahSopir = mDO.upah[currentSopir.posisi].upah
-                    gaji += upahSopir*hargaOmzet
+                    gaji += upahSopir*hargaOmzet/mDO.sopir.size
                     break@sopir
                 }
             }
             val penggajian = Penggajian(keyKaryawan, gaji)
             listPenggajian.add(penggajian)
             gajiTotalKaryawan += gaji
-            Log.d(TAG,"gaji(${mapKaryawan[keyKaryawan]?.nama}) = ${CurrencyFormatter.format(gaji)}")
+//            Log.d(TAG,"gaji(${mapKaryawan[keyKaryawan]?.nama}) = ${gaji}")
         }
         Log.d(TAG, "totalGaji: $gajiTotalKaryawan")
 
@@ -445,7 +480,7 @@ class CreateDOActivity : AppCompatActivity() {
             val it = etRefaksi.text
             if (!b && !TextUtils.isEmpty(it)){
                 val currentValue = UnitValidator.unitPercentToInt(it?.toString())
-                Log.d(TAG, "toInt: ${currentValue}")
+                Log.d(TAG, "toInt: $currentValue")
                 etRefaksi.setText(
                     UnitValidator.validateUnitPercent(currentValue),
                     TextView.BufferType.EDITABLE
@@ -456,7 +491,7 @@ class CreateDOActivity : AppCompatActivity() {
             val it = etHargaSawit.text
             if (!b && !TextUtils.isEmpty(it)){
                 val currentValue = UnitValidator.unitCurrencytoInt(it?.toString())
-                Log.d(TAG, "toInt: ${currentValue}")
+                Log.d(TAG, "toInt: $currentValue")
                 etHargaSawit.setText(
                     UnitValidator.validateUnitCurrency(currentValue),
                     TextView.BufferType.EDITABLE
@@ -467,7 +502,7 @@ class CreateDOActivity : AppCompatActivity() {
             val it = etUpahKaryawan.text
             if (!b && !TextUtils.isEmpty(it)){
                 val currentValue = UnitValidator.unitCurrencytoInt(it?.toString())
-                Log.d(TAG, "toInt: ${currentValue}")
+                Log.d(TAG, "toInt: $currentValue")
                 etUpahKaryawan.setText(
                     UnitValidator.validateUnitCurrency(currentValue),
                     TextView.BufferType.EDITABLE
@@ -478,7 +513,7 @@ class CreateDOActivity : AppCompatActivity() {
             val it = etUpahSopir.text
             if (!b && !TextUtils.isEmpty(it)){
                 val currentValue = UnitValidator.unitPercentToInt(it?.toString())
-                Log.d(TAG, "toInt: ${currentValue}")
+                Log.d(TAG, "toInt: $currentValue")
                 etUpahSopir.setText(
                     UnitValidator.validateUnitPercent(currentValue),
                     TextView.BufferType.EDITABLE
@@ -496,6 +531,20 @@ class CreateDOActivity : AppCompatActivity() {
                 )
             }
         }
+    }
+
+    private fun readLahanDb() {
+        dbLahanHelper.addOnceListValuesEventListenerCallback(
+                object : IDatabaseHelper.ListValuesEventListenerCallback<Lahan> {
+                    override fun onDataUpdate(values: ArrayList<Lahan>?, ids: ArrayList<String>?) {
+                        panenLahanAdapter.updateLahan(values, ids)
+                    }
+
+                    override fun onListValueEventListenerCancelled(errorMessage: String?) {
+                        Log.e(TAG, "onListValueEventListenerCancelled: $errorMessage")
+                    }
+                }, Lahan::class.java
+        )
     }
 
     private fun setEditableViewDO(b: Boolean) {

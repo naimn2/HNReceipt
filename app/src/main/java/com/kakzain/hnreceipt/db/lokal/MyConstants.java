@@ -97,27 +97,28 @@ public class MyConstants {
         return mapResult;
     }
 
-    public static List<String> getNamaPosisiList(@Nonnull Context context, @Nullable String hint, int notEqual){
+    public static Map<Integer, String> getIdDanNamaPosisi(@Nonnull Context context, @Nullable String hint, int notEqual){
         ILokalHelper<Posisi> lokalPosisi = new LokalHelper<>(context, LokalHelper.DB_WHICH_POSISI);
         lokalPosisi.open();
-        List<String> listNamaPosisi = new ArrayList<>();
+        Map<Integer, String> mapResult = new LinkedHashMap<>();
         if (hint != null){
-            listNamaPosisi.add(hint);
+            mapResult.put(MAP_KEY_HINT, hint);
         }
         if (!lokalPosisi.isEmpty()){
             Map<String, Posisi> posMap = lokalPosisi.getItems(Posisi.class);
             int i = 0;
-            for (Posisi posisi: posMap.values()){
+            for (String key: posMap.keySet()){
+                Posisi posisi = posMap.get(key);
                 if (i == notEqual){
                     i++;
                     continue;
                 }
-                listNamaPosisi.add(posisi.getNamaPosisi());
+                mapResult.put(Integer.valueOf(key), posisi.getNamaPosisi());
                 i++;
             }
         }
         lokalPosisi.close();
-        return listNamaPosisi;
+        return mapResult;
     }
 
 //    public static Map<Integer, Posisi> getAllPosisi(@Nonnull Context context, int lessOrEqual){

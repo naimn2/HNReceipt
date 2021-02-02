@@ -22,17 +22,27 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 public class ListGajiKaryawanAdapter extends RecyclerView.Adapter<ListGajiKaryawanAdapter.ViewHolder> {
-    private List<Penggajian> listPenggajian;
+    private final List<Penggajian> listPenggajian;
+    private Map<String, Karyawan> mapKaryawan;
     private final Context context;
 
     public ListGajiKaryawanAdapter(@Nonnull Context context) {
         this.context = context;
         this.listPenggajian = new ArrayList<>();
+        this.mapKaryawan = MyConstants.getAllKaryawan(context);
     }
 
     public void setData(List<Penggajian> listPenggajian) {
         this.listPenggajian.clear();
         this.listPenggajian.addAll(listPenggajian);
+        notifyDataSetChanged();
+    }
+
+    public void updateKaryawan(List<Karyawan> listKaryawan, List<String> ids) {
+        this.mapKaryawan.clear();
+        for (int i = 0; i < listKaryawan.size(); i++) {
+            mapKaryawan.put(ids.get(i), listKaryawan.get(i));
+        }
         notifyDataSetChanged();
     }
 
@@ -46,10 +56,10 @@ public class ListGajiKaryawanAdapter extends RecyclerView.Adapter<ListGajiKaryaw
     @Override
     public void onBindViewHolder(@NonNull ListGajiKaryawanAdapter.ViewHolder holder, int position) {
         Penggajian penggajian = listPenggajian.get(position);
-        Karyawan karyawan = MyConstants.getAllKaryawan(context).get(penggajian.getIdKaryawan());
-        holder.tvNama.setText(karyawan==null?null:karyawan.getNama());
+        Karyawan karyawan = mapKaryawan.get(penggajian.getIdKaryawan());
+        holder.tvNama.setText(karyawan==null?context.getString(R.string.unavailable):karyawan.getNama());
         holder.tvGaji.setText(
-                UnitValidator.validateUnitCurrency((int) penggajian.getGaji().doubleValue()));
+                UnitValidator.validateUnitCurrency((int) penggajian.getGaji()));
     }
 
     @Override

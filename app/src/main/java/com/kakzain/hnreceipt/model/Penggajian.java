@@ -2,12 +2,12 @@ package com.kakzain.hnreceipt.model;
 
 public class Penggajian {
     private String idKaryawan;
-    private Double gaji;
+    private double gaji;
 
     public Penggajian() {
     }
 
-    public Penggajian(String idKaryawan, Double gaji) {
+    public Penggajian(String idKaryawan, double gaji) {
         this.idKaryawan = idKaryawan;
         this.gaji = gaji;
     }
@@ -16,7 +16,7 @@ public class Penggajian {
         return idKaryawan;
     }
 
-    public Double getGaji() {
+    public double getGaji() {
         return gaji;
     }
 }

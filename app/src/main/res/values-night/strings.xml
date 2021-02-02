@@ -80,4 +80,6 @@
     <string name="nama_lahan">Nama Lahan</string>
     <string name="lahan_ini_tidak_lagi_tersedia">Lahan ini tidak lagi tersedia</string>
     <string name="pilih_lahan">Pilih Lahan</string>
+    <string name="beratRefaksi">Berat Refaksi</string>
+    <string name="unavailable">-</string>
 </resources>

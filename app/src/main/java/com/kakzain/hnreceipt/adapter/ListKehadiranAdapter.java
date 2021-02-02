@@ -18,17 +18,25 @@ import com.kakzain.hnreceipt.R;
 import com.kakzain.hnreceipt.model.Karyawan;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 public class ListKehadiranAdapter extends RecyclerView.Adapter<ListKehadiranAdapter.ViewHolder> {
     private static final String TAG = ListKehadiranAdapter.class.getSimpleName();
     private final Context context;
     private final ArrayList<Karyawan> listKaryawan;
+    private final List<String> listNamaPosisi;
     private OnClickListenerCallback onHadirListenerCallback;
 
     public ListKehadiranAdapter(Context context) {
         this.listKaryawan = new ArrayList<>();
         this.context = context;
+        listNamaPosisi = new ArrayList<>(
+                MyConstants.getIdDanNamaPosisi(
+                        context,
+                        "Absen",
+                        MyConstants.POSISI_SOPIR_INDEKS
+                ).values()
+        );
     }
 
     public void setData(ArrayList<Karyawan> listKaryawan){
@@ -57,7 +65,7 @@ public class ListKehadiranAdapter extends RecyclerView.Adapter<ListKehadiranAdap
                 context,
                 android.R.layout.simple_spinner_dropdown_item,
                 // ARRAY SELAIN SOPIR
-                MyConstants.getNamaPosisiList(context, "Absen", MyConstants.POSISI_SOPIR_INDEKS)
+                listNamaPosisi
         );
         holder.spinHadir.setAdapter(spinHadirAdapter);
         holder.spinHadir.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

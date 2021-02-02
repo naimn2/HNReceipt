@@ -56,7 +56,7 @@ public class ListDeliveryOrderAdapter extends RecyclerView.Adapter<ListDeliveryO
     public void onBindViewHolder(@NonNull ListDeliveryOrderAdapter.ViewHolder holder, int position) {
         DeliveryOrder mDO = listDO.get(position);
         holder.tvTanggal.setText(DateFormatter.getDate(mDO.getTanggal().toDate().getTime()));
-        holder.tvBeratTotal.setText(String.valueOf(mDO.getBeratTotal())+" Kg");
+        holder.tvBeratTotal.setText(String.format("%.1f Kg", mDO.getBeratTotal()));
         // SET VISIBILITY DRAFT CONDITION
         if (!mDO.isCommitted()){
             holder.tvDraft.setVisibility(View.VISIBLE);

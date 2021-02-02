@@ -13,8 +13,11 @@ import com.kakzain.hnreceipt.db.firebase.FirestoreHelper
 import com.kakzain.hnreceipt.db.lokal.MyConstants
 import com.kakzain.hnreceipt.helper.UnitValidator
 import com.kakzain.hnreceipt.model.DeliveryOrder
+import com.kakzain.hnreceipt.model.Karyawan
 import com.kakzain.hnreceipt.model.Summary
 import kotlinx.android.synthetic.main.activity_summary.*
+import java.lang.StringBuilder
+import java.util.ArrayList
 import kotlin.math.roundToInt
 
 class SummaryActivity : AppCompatActivity() {
@@ -29,6 +32,7 @@ class SummaryActivity : AppCompatActivity() {
     private lateinit var _DO: DeliveryOrder
     private lateinit var dbSummaryHelper: IDatabaseHelper<Summary>
     private lateinit var dbDOHelper: IDatabaseHelper<DeliveryOrder>
+    private lateinit var dbKaryawanHelper: IDatabaseHelper<Karyawan>
     private lateinit var listGajiKaryawanAdapter: ListGajiKaryawanAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +48,8 @@ class SummaryActivity : AppCompatActivity() {
         dbSummaryHelper.setReference(Summary.SUMMARY_DB_REFERENCE+"/"+idDO)
         dbDOHelper = FirestoreHelper()
         dbDOHelper.setReference(DeliveryOrder.DO_DB_REFERENCE+"/"+idDO)
+        dbKaryawanHelper = FirestoreHelper()
+        dbKaryawanHelper.setReference(Karyawan.KARYAWAN_DB_REFERENCE)
 
         rv_activity_summary.layoutManager = object: LinearLayoutManager(this){
             override fun canScrollVertically(): Boolean {
@@ -53,6 +59,7 @@ class SummaryActivity : AppCompatActivity() {
         listGajiKaryawanAdapter = ListGajiKaryawanAdapter(this)
         rv_activity_summary.adapter = listGajiKaryawanAdapter
         readSummaryDb()
+        readKaryawanDb()
     }
 
     private fun readSummaryDb() {
@@ -95,7 +102,8 @@ class SummaryActivity : AppCompatActivity() {
     private fun setupViews() {
         val beratKotor = _DO.beratTotal
         val refaksiPercent = (_DO.refaksi*100).roundToInt()
-        val beratBersih = beratKotor - (beratKotor*refaksiPercent/100.0)
+        val beratRefaksi = refaksiPercent*beratKotor/100.0
+        val beratBersih = beratKotor - beratRefaksi
         val hargaOmzet = beratBersih*_DO.hargaSawit
         val hargaBersih = summary.hargaBersih.toInt()
 
@@ -105,10 +113,25 @@ class SummaryActivity : AppCompatActivity() {
         }
         tv_activitySummary_nilaiTotalGaji.text = UnitValidator.validateUnitCurrency(totalGaji.toLong())
         tv_activitySummary_nilaiBeratKotor.text = UnitValidator.validateUnitWeight(beratKotor.toDouble())
-        tv_activitySummary_nilaiRefaksi.text = UnitValidator.validateUnitPercent(refaksiPercent)
+        tv_activitySummary_labelRefaksi.text = StringBuilder(getString(R.string.beratRefaksi)).append(" (")
+                .append(UnitValidator.validateUnitPercent(refaksiPercent)).append(")").toString()
+        tv_activitySummary_nilaiRefaksi.text = UnitValidator.validateUnitWeight(beratRefaksi)
         tv_activitySummary_nilaiBeratBersih.text = UnitValidator.validateUnitWeight(beratBersih)
         tv_activitySummary_nilaiHargaOmzet.text = UnitValidator.validateUnitCurrency(hargaOmzet.toLong())
         tv_activitySummary_nilaiHargaBersih.text = UnitValidator.validateUnitCurrency(hargaBersih)
+    }
+
+    private fun readKaryawanDb() {
+        dbKaryawanHelper.addOnceListValuesEventListenerCallback(
+                object : IDatabaseHelper.ListValuesEventListenerCallback<Karyawan>{
+                override fun onDataUpdate(values: ArrayList<Karyawan>?, ids: ArrayList<String>?) {
+                    listGajiKaryawanAdapter.updateKaryawan(values, ids)
+                }
+
+                override fun onListValueEventListenerCancelled(errorMessage: String?) {
+                    Log.e(TAG, "onListValueEventListenerCancelled: $errorMessage")
+                }
+            }, Karyawan::class.java)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

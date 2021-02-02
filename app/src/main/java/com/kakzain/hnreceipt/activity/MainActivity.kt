@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
     private fun readDBLahan() {
         dbLahanHelper.setReference(Lahan.LAHAN_DB_REFERENCE)
             .addConditional(IDatabaseHelper.IS_DELETED_COLUMN, false)
+            .orderBy(FirestoreHelper.TIMESTAMP_COLUMN, FirestoreHelper.ASCENDING_DIRECTION)
             .addOnceListValuesEventListenerCallback(object : IDatabaseHelper.ListValuesEventListenerCallback<Lahan> {
                 override fun onDataUpdate(values: ArrayList<Lahan>?, ids: ArrayList<String>?) {
                     if (values != null && ids != null) {
@@ -83,6 +84,7 @@ class MainActivity : AppCompatActivity() {
     private fun readDBKaryawan() {
         dbKaryawanHelper.setReference(Karyawan.KARYAWAN_DB_REFERENCE)
             .addConditional(IDatabaseHelper.IS_DELETED_COLUMN, false)
+            .orderBy(FirestoreHelper.TIMESTAMP_COLUMN, FirestoreHelper.ASCENDING_DIRECTION)
             .addOnceListValuesEventListenerCallback(object : IDatabaseHelper.ListValuesEventListenerCallback<Karyawan> {
                 override fun onDataUpdate(values: ArrayList<Karyawan>?, ids: ArrayList<String>?) {
                     if (values != null && ids != null) {
