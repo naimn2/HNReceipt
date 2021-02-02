@@ -1,6 +1,7 @@
 package com.kakzain.hnreceipt.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -25,13 +26,13 @@ import java.util.Map;
 public class ListPanenLahanAdapter extends RecyclerView.Adapter<ListPanenLahanAdapter.ViewHolder> {
     private Context context;
     private List<PanenSawitLahan> listPanenSawitLahan;
-    private Map<Integer, String> mapNamaLahan;
+    private Map<String, Lahan> mapNamaLahan;
     private OnMenuClickListenerCallback onMenuClickListenerCallback;
 
     public ListPanenLahanAdapter(Context context) {
         this.listPanenSawitLahan = new ArrayList<>();
         this.context = context;
-        mapNamaLahan = MyConstants.getNamaLahanAndIdMap(context, null);
+        mapNamaLahan = MyConstants.getAllLahan(context);
     }
 
     public void setData(List<PanenSawitLahan> listPanenSawitLahan){
@@ -43,9 +44,9 @@ public class ListPanenLahanAdapter extends RecyclerView.Adapter<ListPanenLahanAd
     public void updateLahan(List<Lahan> listLahan, List<String> ids) {
         this.mapNamaLahan.clear();
         for (int i = 0; i < listLahan.size(); i++) {
-            String namaLahan = listLahan.get(i).getNamaLahan();
-            Integer idLahan = Integer.parseInt(ids.get(i));
-            this.mapNamaLahan.put(idLahan, namaLahan);
+            Lahan lahan = listLahan.get(i);
+            String idLahan = ids.get(i);
+            this.mapNamaLahan.put(idLahan, lahan);
         }
         notifyDataSetChanged();
     }
@@ -67,9 +68,12 @@ public class ListPanenLahanAdapter extends RecyclerView.Adapter<ListPanenLahanAd
         int jumlahHadir = panenLahan.getKehadiran().size();
         int idLahan = panenLahan.getIdLahan();
 
-        String namaLahan = mapNamaLahan.get(idLahan);
-        holder.tvLahan.setText(TextUtils.isEmpty(namaLahan)?
-                context.getString(R.string.unavailable): namaLahan);
+        Lahan lahan = mapNamaLahan.get(String.valueOf(idLahan));
+        if (lahan != null && lahan.isDeleted()){
+            holder.tvLahan.setTextColor(Color.GRAY);
+        }
+        holder.tvLahan.setText(lahan==null?
+                context.getString(R.string.unavailable): lahan.getNamaLahan());
         holder.tvJumlahHadir.setText(String.format("%d Hadir", jumlahHadir));
         holder.tvBersih.setText(String.valueOf(panenLahan.getBeratBersih())+" Kg");
         holder.tvBrondol.setText(String.valueOf(panenLahan.getBeratBrondol())+" Kg");

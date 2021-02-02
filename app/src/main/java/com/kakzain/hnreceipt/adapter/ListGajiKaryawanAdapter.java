@@ -1,6 +1,7 @@
 package com.kakzain.hnreceipt.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,10 @@ public class ListGajiKaryawanAdapter extends RecyclerView.Adapter<ListGajiKaryaw
     public void onBindViewHolder(@NonNull ListGajiKaryawanAdapter.ViewHolder holder, int position) {
         Penggajian penggajian = listPenggajian.get(position);
         Karyawan karyawan = mapKaryawan.get(penggajian.getIdKaryawan());
+        if (karyawan != null && karyawan.isDeleted()){
+            holder.tvNama.setTextColor(Color.RED);
+            holder.tvGaji.setTextColor(Color.RED);
+        }
         holder.tvNama.setText(karyawan==null?context.getString(R.string.unavailable):karyawan.getNama());
         holder.tvGaji.setText(
                 UnitValidator.validateUnitCurrency((int) penggajian.getGaji()));
