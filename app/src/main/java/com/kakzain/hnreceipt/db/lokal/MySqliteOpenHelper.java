@@ -53,8 +53,8 @@ public class MySqliteOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        for (int j = 0; j < DB_TABLES.length; j++) {
-            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + DB_TABLES[j]);
+        for (String dbTable : DB_TABLES) {
+            sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + dbTable);
         }
         onCreate(sqLiteDatabase);
     }

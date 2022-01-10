@@ -41,7 +41,7 @@ public class FirestoreHelper<E> implements IDatabaseHelper<E> {
     private ListValuesEventListenerCallback<E> listValuesEventListenerCallback;
     private ValueEventListenerCallback<E> valueEventListenerCallback;
     private ChildEventListenerCallback childEventListenerCallback;
-    private ArrayList<String> keys;
+    private final ArrayList<String> keys;
 
     public FirestoreHelper(){
         keys = new ArrayList<>();

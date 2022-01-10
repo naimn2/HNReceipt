@@ -21,8 +21,8 @@ import java.util.List;
 
 public class ListKaryawanAdapter extends RecyclerView.Adapter<ListKaryawanAdapter.ViewHolder> {
     private static final String TAG = ListKaryawanAdapter.class.getSimpleName();
-    private Context context;
-    private List<Karyawan> listKaryawan;
+    private final Context context;
+    private final List<Karyawan> listKaryawan;
     private OnMenuItemClickListenerCallback onMenuItemClickListenerCallback;
 
     public ListKaryawanAdapter(Context context) {

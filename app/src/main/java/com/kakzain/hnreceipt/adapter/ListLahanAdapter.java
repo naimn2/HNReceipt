@@ -21,8 +21,8 @@ import java.util.List;
 
 public class ListLahanAdapter extends RecyclerView.Adapter<ListLahanAdapter.ViewHolder> {
     private static final String TAG = ListLahanAdapter.class.getSimpleName();
-    private Context context;
-    private List<Lahan> listLahan;
+    private final Context context;
+    private final List<Lahan> listLahan;
     private OnMenuItemClickListenerCallback onMenuItemClickListenerCallback;
 
     public ListLahanAdapter(Context context) {

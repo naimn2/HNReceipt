@@ -1,5 +1,6 @@
 package com.kakzain.hnreceipt.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -22,8 +23,8 @@ import java.util.List;
 public class ListDeliveryOrderAdapter extends RecyclerView.Adapter<ListDeliveryOrderAdapter.ViewHolder> {
     public static final long LOAD_LIMIT = 10;
     private final Context context;
-    private List<DeliveryOrder> listDO;
-    private List<String> listIds;
+    private final List<DeliveryOrder> listDO;
+    private final List<String> listIds;
     private boolean isEndOfData;
 
     public ListDeliveryOrderAdapter(Context context) {
@@ -52,6 +53,7 @@ public class ListDeliveryOrderAdapter extends RecyclerView.Adapter<ListDeliveryO
         return new ViewHolder(view);
     }
 
+    @SuppressLint({"DefaultLocale", "SetTextI18n"})
     @Override
     public void onBindViewHolder(@NonNull ListDeliveryOrderAdapter.ViewHolder holder, int position) {
         DeliveryOrder mDO = listDO.get(position);
@@ -65,9 +67,9 @@ public class ListDeliveryOrderAdapter extends RecyclerView.Adapter<ListDeliveryO
         }
         // SET VIEW
         if (mDO.getPanenSawitLahan() != null) {
-            holder.tvJumlahPanen.setText(String.valueOf(mDO.getPanenSawitLahan().size())+" Lahan");
+            holder.tvJumlahPanen.setText(mDO.getPanenSawitLahan().size() +" Lahan");
         } else {
-            holder.tvJumlahPanen.setText(String.valueOf(0)+" Lahan");
+            holder.tvJumlahPanen.setText(0 +" Lahan");
         }
         // VISIBILITY LOAD MORE CONTROLLER
         if (position == listDO.size()-1 && listDO.size() >= LOAD_LIMIT && !isEndOfData){

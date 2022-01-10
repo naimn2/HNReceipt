@@ -4,24 +4,24 @@ import android.content.Context;
 import android.net.Uri;
 
 public interface IAuthHelper {
-    public void signInWithEmailAndPassword(String email, String password, OnSignInCompleteCallback onSignInCompleteCallback);
-    public void signInWithGoogleAuth(String idToken, OnSignInCompleteCallback onSignInCompleteCallback);
-    public void signInWithFacebookAuth(String idToken, OnSignInCompleteCallback onSignInCompleteCallback);
-    public void signUpWithEmailAndPassword(String email, String password, OnSignInCompleteCallback onSignInCompleteCallback);
-    public String getDisplayName();
-    public Uri getPhotoUrl();
-    public String getEmail();
-    public String getPhoneNumber();
-    public void signOut(Context context);
-    public void updateProfil(String newName, String photoUri, OnUpdateProfileCompleteCallback onUpdateCompleteCallback);
+    void signInWithEmailAndPassword(String email, String password, OnSignInCompleteCallback onSignInCompleteCallback);
+    void signInWithGoogleAuth(String idToken, OnSignInCompleteCallback onSignInCompleteCallback);
+    void signInWithFacebookAuth(String idToken, OnSignInCompleteCallback onSignInCompleteCallback);
+    void signUpWithEmailAndPassword(String email, String password, OnSignInCompleteCallback onSignInCompleteCallback);
+    String getDisplayName();
+    Uri getPhotoUrl();
+    String getEmail();
+    String getPhoneNumber();
+    void signOut(Context context);
+    void updateProfil(String newName, String photoUri, OnUpdateProfileCompleteCallback onUpdateCompleteCallback);
 
-    public interface OnSignInCompleteCallback {
-        public void onSuccess(String signInMethod);
-        public void onFailure(Exception e);
+    interface OnSignInCompleteCallback {
+        void onSuccess(String signInMethod);
+        void onFailure(Exception e);
     }
 
-    public interface OnUpdateProfileCompleteCallback {
-        public void onSuccess(Void avoid);
-        public void onFailure(Exception e);
+    interface OnUpdateProfileCompleteCallback {
+        void onSuccess(Void avoid);
+        void onFailure(Exception e);
     }
 }

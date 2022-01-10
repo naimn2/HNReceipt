@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HNReceipt">
-        <activity android:name=".activity.DaftarLahanActivity"></activity>
+        <activity android:name=".activity.DaftarLahanActivity"/>
         <activity android:name=".activity.DaftarKaryawanActivity" />
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.SummaryActivity" />

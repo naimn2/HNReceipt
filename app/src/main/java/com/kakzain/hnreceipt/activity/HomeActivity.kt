@@ -45,7 +45,7 @@ class HomeActivity : AppCompatActivity() {
         startActivity(mIntent)
     }
 
-    private var isClickBackTwice = false;
+    private var isClickBackTwice = false
 
     override fun onBackPressed() {
         if (isClickBackTwice) {

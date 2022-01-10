@@ -162,7 +162,7 @@ class CreateDOActivity : AppCompatActivity() {
 //            val posisiKeys = ArrayList<Int>(MyConstants.getAllPosisi(this).keys)
             val posisiKeys = ArrayList<Int>(MyConstants.getIdDanNamaPosisi(
                     this, null, MyConstants.POSISI_SOPIR_INDEKS).keys)
-            Log.d(TAG, "showDialogTambahLahanPanen: ${posisiKeys.toString()}")
+            Log.d(TAG, "showDialogTambahLahanPanen: $posisiKeys")
             Log.d(TAG, "showDialogTambahLahanPanen: i: $i")
             Log.d(TAG, "showDialogTambahLahanPanen: position: $position")
             if (i == 0){

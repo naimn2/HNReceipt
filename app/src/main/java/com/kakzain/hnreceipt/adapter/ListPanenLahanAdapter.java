@@ -1,5 +1,6 @@
 package com.kakzain.hnreceipt.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
@@ -24,9 +25,9 @@ import java.util.List;
 import java.util.Map;
 
 public class ListPanenLahanAdapter extends RecyclerView.Adapter<ListPanenLahanAdapter.ViewHolder> {
-    private Context context;
-    private List<PanenSawitLahan> listPanenSawitLahan;
-    private Map<String, Lahan> mapNamaLahan;
+    private final Context context;
+    private final List<PanenSawitLahan> listPanenSawitLahan;
+    private final Map<String, Lahan> mapNamaLahan;
     private OnMenuClickListenerCallback onMenuClickListenerCallback;
 
     public ListPanenLahanAdapter(Context context) {
@@ -75,8 +76,8 @@ public class ListPanenLahanAdapter extends RecyclerView.Adapter<ListPanenLahanAd
         holder.tvLahan.setText(lahan==null?
                 context.getString(R.string.unavailable): lahan.getNamaLahan());
         holder.tvJumlahHadir.setText(String.format("%d Hadir", jumlahHadir));
-        holder.tvBersih.setText(String.valueOf(panenLahan.getBeratBersih())+" Kg");
-        holder.tvBrondol.setText(String.valueOf(panenLahan.getBeratBrondol())+" Kg");
+        holder.tvBersih.setText(panenLahan.getBeratBersih() + " Kg");
+        holder.tvBrondol.setText(panenLahan.getBeratBrondol() + " Kg");
 
         if (onMenuClickListenerCallback == null){
             holder.ivMore.setVisibility(View.GONE);

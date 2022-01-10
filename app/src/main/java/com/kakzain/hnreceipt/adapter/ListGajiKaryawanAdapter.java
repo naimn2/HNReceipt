@@ -24,7 +24,7 @@ import javax.annotation.Nonnull;
 
 public class ListGajiKaryawanAdapter extends RecyclerView.Adapter<ListGajiKaryawanAdapter.ViewHolder> {
     private final List<Penggajian> listPenggajian;
-    private Map<String, Karyawan> mapKaryawan;
+    private final Map<String, Karyawan> mapKaryawan;
     private final Context context;
 
     public ListGajiKaryawanAdapter(@Nonnull Context context) {
